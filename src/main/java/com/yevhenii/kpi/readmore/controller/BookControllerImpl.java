@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -33,14 +32,16 @@ public class BookControllerImpl implements BookController {
 
 
     @Override
-    @RequestMapping(method = GET)
-    @ResponseBody
+    @RequestMapping(method = GET, produces = "application/json")
     public Callable<ResponseEntity<Book>> findBookByNameAndAuthor(@RequestParam String name,
                                                                   @RequestParam String author) {
+
         LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
-            Optional<Book> book = bookService.findBookByNameAndAuthor(name, author);
+            Optional<Book> book = bookService.findOneBookByNameAndAuthor(name, author);
+
+            LOGGER.info(String.format("found book option = %s", book.toString()));
 
             return book
                     .map(ResponseEntity::ok)

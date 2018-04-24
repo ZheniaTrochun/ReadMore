@@ -1,6 +1,8 @@
 package com.yevhenii.kpi.readmore.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Column;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserReview {
 
     @Id
