@@ -1,4 +1,4 @@
-package com.yevhenii.kpi.readmore.api;
+package com.yevhenii.kpi.readmore.model.response;
 
 public class BookResponse {
 

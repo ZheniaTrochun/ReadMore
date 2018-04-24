@@ -1,6 +1,6 @@
 package com.yevhenii.kpi.readmore.api;
 
-import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
 
 import java.util.List;
 import java.util.Optional;

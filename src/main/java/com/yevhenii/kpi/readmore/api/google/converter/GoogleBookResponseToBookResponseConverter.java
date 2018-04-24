@@ -1,7 +1,7 @@
 package com.yevhenii.kpi.readmore.api.google.converter;
 
-import com.yevhenii.kpi.readmore.api.BookResponse;
-import com.yevhenii.kpi.readmore.api.BookResponseBuilder;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
+import com.yevhenii.kpi.readmore.model.response.BookResponseBuilder;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.ImageLinks;
 import com.yevhenii.kpi.readmore.api.google.model.VolumeInfo;

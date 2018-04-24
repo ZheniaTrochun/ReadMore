@@ -1,6 +1,6 @@
 package com.yevhenii.kpi.readmore.converter;
 
-import com.yevhenii.kpi.readmore.api.BookResponse;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.BookBuilder;
 import org.springframework.stereotype.Component;

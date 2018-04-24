@@ -1,6 +1,6 @@
 package com.yevhenii.kpi.readmore.api.google;
 
-import com.yevhenii.kpi.readmore.api.BookResponse;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
 import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookResponseConverter;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
