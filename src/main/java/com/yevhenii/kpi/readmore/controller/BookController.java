@@ -2,10 +2,19 @@ package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.model.Book;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.concurrent.Callable;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 public interface BookController {
 
-    Callable<ResponseEntity<Book>> findBookByNameAndAuthor(String name, String author);
+    @RequestMapping(method = GET, produces = "application/json")
+    Callable<ResponseEntity<List<Book>>> findBooksByNameAndAuthor(@RequestParam String name,
+                                                                  @RequestParam String author);
+
+    Callable<ResponseEntity<Book>> findOneBookByNameAndAuthor(String name, String author);
 }

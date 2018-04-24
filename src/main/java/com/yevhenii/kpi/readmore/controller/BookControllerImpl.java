@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -33,7 +34,24 @@ public class BookControllerImpl implements BookController {
 
     @Override
     @RequestMapping(method = GET, produces = "application/json")
-    public Callable<ResponseEntity<Book>> findBookByNameAndAuthor(@RequestParam String name,
+    public Callable<ResponseEntity<List<Book>>> findBooksByNameAndAuthor(@RequestParam String name,
+                                                                        @RequestParam String author) {
+
+        LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
+
+        return () -> {
+            List<Book> books = bookService.findManyBooksByNameAndAuthor(name, author);
+
+            LOGGER.info(String.format("found books, length = %d", books.size()));
+
+            return ResponseEntity.ok(books);
+        };
+    }
+
+
+    @Override
+    @RequestMapping(path = "/one", method = GET, produces = "application/json")
+    public Callable<ResponseEntity<Book>> findOneBookByNameAndAuthor(@RequestParam String name,
                                                                   @RequestParam String author) {
 
         LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
