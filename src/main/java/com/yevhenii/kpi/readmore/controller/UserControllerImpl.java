@@ -26,14 +26,8 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/login", method = POST)
-    public Boolean register(@RequestBody UserRegisterDto registerDto) {
-        return null;
-    }
-
-    @Override
     @RequestMapping(value = "/register", method = POST)
-    public Boolean login(@RequestBody UserLoginDto loginDto) {
+    public Boolean register(@RequestBody UserRegisterDto registerDto) {
         return null;
     }
 }
