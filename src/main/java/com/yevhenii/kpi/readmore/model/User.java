@@ -19,6 +19,7 @@ public class User {
     private Long id;
 
     private String name;
+    @Email
     private String email;
 
     private String role;
@@ -27,7 +28,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String role, String hashedPass) {
+    public User(String name, String email, String hashedPass, String role) {
         this.name = name;
         this.email = email;
         this.role = role;
@@ -72,5 +73,16 @@ public class User {
 
     public void setHashedPass(String hashedPass) {
         this.hashedPass = hashedPass;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", hashedPass='" + hashedPass + '\'' +
+                '}';
     }
 }

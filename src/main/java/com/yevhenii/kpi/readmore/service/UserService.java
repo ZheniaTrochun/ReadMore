@@ -1,4 +1,10 @@
 package com.yevhenii.kpi.readmore.service;
 
+import com.yevhenii.kpi.readmore.exception.EmailIsAlreadyTakenException;
+import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
+import com.yevhenii.kpi.readmore.model.User;
+
 public interface UserService {
+
+    User register(String username, String email, String password) throws UsernameIsAlreadyTakenException, EmailIsAlreadyTakenException;
 }
