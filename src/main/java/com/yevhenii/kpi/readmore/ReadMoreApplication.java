@@ -21,28 +21,7 @@ import java.util.Collections;
 @EnableWebMvc
 public class ReadMoreApplication {
 
-	@Autowired
-	private BookRepository bookRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
 	public static void main(String[] args) {
 		SpringApplication.run(ReadMoreApplication.class, args);
-	}
-
-	@Bean
-	public CommandLineRunner runner() {
-		return args -> {
-			Book book = bookRepository.save(new Book("test1", "test2"));
-
-			User user = new User();
-			user.setName("admin123");
-			user.setEmail("test@mail.com");
-			user.setHashedPass("");
-			user.setTodo(Collections.singletonList(book));
-
-			userRepository.save(user);
-		};
 	}
 }

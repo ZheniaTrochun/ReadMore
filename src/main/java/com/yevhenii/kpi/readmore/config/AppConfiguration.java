@@ -1,4 +1,4 @@
-package com.yevhenii.kpi.readmore;
+package com.yevhenii.kpi.readmore.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
