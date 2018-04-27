@@ -27,6 +27,8 @@
 <script>
   import axios from 'axios'
 
+  import { storeToken } from '../auth/auth'
+
   export default {
     name: 'login',
 
@@ -43,7 +45,10 @@
             username: this.username,
             password: this.password
           }))
-          .then(() => {
+          .then((res) => {
+            console.log(res.headers['authorization'])
+            storeToken(res.headers['authorization'])
+
             this.$emit('clicked',
               {
                 res: true,
