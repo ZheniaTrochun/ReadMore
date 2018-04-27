@@ -69,6 +69,8 @@ public class TokenAuthenticationService {
                 .getBody()
                 .getSubject();
 
+        request.setAttribute("user", username);
+
         return username != null ?
                 new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList()) :
                 null;

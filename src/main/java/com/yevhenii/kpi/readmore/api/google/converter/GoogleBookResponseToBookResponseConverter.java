@@ -13,6 +13,7 @@ import java.util.function.Function;
 @Component
 public class GoogleBookResponseToBookResponseConverter implements Function<GoogleBookResponse, BookResponse> {
 
+//    todo refactor this!
     @Override
     public BookResponse apply(GoogleBookResponse googleBookResponse) {
         VolumeInfo volumeInfo = googleBookResponse.getVolumeInfo();
@@ -26,7 +27,9 @@ public class GoogleBookResponseToBookResponseConverter implements Function<Googl
                 .setAuthor(String.join(", ", volumeInfo.getAuthors()))
                 .setGenre(volumeInfo.getMainCategory())
                 .setImageLink(imageLink)
-                .setYear(Integer.parseInt(volumeInfo.getPublishedDate().split("-")[0]))
+                .setYear(Integer.parseInt(volumeInfo.getPublishedDate() == null ?
+                        volumeInfo.getPublishedDate().split("-")[0]
+                        : ""))
                 .createBookResponse();
     }
 }

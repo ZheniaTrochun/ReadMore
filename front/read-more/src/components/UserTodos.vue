@@ -35,10 +35,14 @@
         </md-card>
       </div>
 
-      <md-button class="md-fab md-primary add-todo">
+      <md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">
         <md-icon>add</md-icon>
       </md-button>
     </div>
+
+    <md-dialog :md-active.sync="showSearchDialog">
+      <book-search @clicked="onCloseSearchModal"/>
+    </md-dialog>
 
 
   </div>
@@ -46,10 +50,39 @@
 
 <script>
 
+  import axios from 'axios'
+
+  import { getToken } from '../auth/auth'
+  import BookSearch from "./BookSearch.vue";
+
   export default {
+    components: {BookSearch},
     name: 'userTodos',
+
+    mounted() {
+      axios.get(
+        'http://localhost:8080/user/todo',
+        {
+          headers: {
+            'authorization': getToken()
+          }
+        })
+        .then((res) => {
+          this.books = res.data
+        })
+        .catch((err) => console.error(err))
+    },
+
+    methods: {
+      onCloseSearchModal() {
+        this.showSearchDialog = false;
+      }
+    },
+
     data () {
       return {
+        showSearchDialog: false,
+
         searchCriteria: '',
         msg: 'Welcome to Your Vue.js App',
         books: [
