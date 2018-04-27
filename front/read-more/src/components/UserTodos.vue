@@ -11,14 +11,35 @@
     </div>
 
     <div class="container">
+
       <h1 class="todos">User TODOs</h1>
-      <ul class="items">
-        <li v-for="book in books">
-          {{ book.name }}
-          {{ book.author }}
-        </li>
-      </ul>
+
+      <div class="items">
+        <md-card v-for="book in books">
+          <md-ripple>
+            <md-card-header>
+              <div class="md-title">{{ book.name }}</div>
+              <div class="md-subhead">{{ book.author }}</div>
+            </md-card-header>
+
+            <md-card-content>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
+            </md-card-content>
+
+            <md-card-actions>
+              <md-button class="md-primary">Start</md-button>
+              <md-button class="md-accent">Delete</md-button>
+            </md-card-actions>
+
+          </md-ripple>
+        </md-card>
+      </div>
+
+      <md-button class="md-fab md-primary add-todo">
+        <md-icon>add</md-icon>
+      </md-button>
     </div>
+
 
   </div>
 </template>
@@ -33,14 +54,32 @@
         msg: 'Welcome to Your Vue.js App',
         books: [
           {
+            id: 1,
             name: 'Harry Potter',
             author: 'J. K. Rowling',
           },
           {
+            id: 1,
             name: 'Harry Potter 2',
             author: 'J. K. Rowling',
           },
           {
+            id: 1,
+            name: 'Harry Potter 3',
+            author: 'J. K. Rowling',
+          },
+          {
+            id: 1,
+            name: 'Harry Potter',
+            author: 'J. K. Rowling',
+          },
+          {
+            id: 1,
+            name: 'Harry Potter 2',
+            author: 'J. K. Rowling',
+          },
+          {
+            id: 1,
             name: 'Harry Potter 3',
             author: 'J. K. Rowling',
           }
@@ -51,6 +90,14 @@
 </script>
 
 <style scoped>
+
+  .md-card {
+    width: 75%;
+    margin: 4px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
   .hello {
     position: absolute;
     top: 0;
@@ -91,7 +138,7 @@
     margin: auto;
     padding-top: 120px;
     padding-bottom: 50px;
-    width: 70%;
+    width: 80%;
     background-color: #333;
     height: 100vh;
   }
@@ -106,5 +153,16 @@
     top: 0;
     right: 0;
     left: 0;
+  }
+
+  .items {
+    overflow: auto;
+    max-height: 70vh;
+  }
+
+  .add-todo {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
   }
 </style>
