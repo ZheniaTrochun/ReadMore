@@ -36,6 +36,8 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         UserLoginDto creds = new ObjectMapper()
                 .readValue(request.getInputStream(), UserLoginDto.class);
 
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
         return getAuthenticationManager()
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         creds.getUsername(),

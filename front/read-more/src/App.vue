@@ -15,7 +15,7 @@
         </md-button>
 
         <div class="top-buttons">
-          <md-button class="login md-raised">Login</md-button>
+          <md-button class="login md-raised" @click="showLoginDialog = true">Login</md-button>
           <md-button class="register md-raised" @click="showRegisterDialog = true">Register</md-button>
         </div>
 
@@ -32,45 +32,88 @@
     <router-view/>
 
     <md-dialog :md-active.sync="showRegisterDialog">
-      <md-dialog-title style="text-align: center;">Register</md-dialog-title>
-
-      <div class="form-holder">
-        <md-field md-clearable>
-          <label>Cleareable</label>
-          <md-input v-model="username"></md-input>
-        </md-field>
-
-        <md-field>
-          <label>Password</label>
-          <md-input v-model="password" type="password"></md-input>
-        </md-field>
-
-        <md-field :md-toggle-password="false">
-          <label>Email</label>
-          <md-input v-model="email" type="email"></md-input>
-        </md-field>
-      </div>
-
-      <md-dialog-actions>
-        <md-button class="md-raised register" @click="showRegisterDialog = false">Register</md-button>
-        <md-button class="md-raised md-accent" @click="showRegisterDialog = false">Close</md-button>
-      </md-dialog-actions>
+      <register @clicked="onCloseRegisterModal"/>
     </md-dialog>
 
+    <md-dialog :md-active.sync="showLoginDialog">
+      <login @clicked="onCloseLoginModal"/>
+    </md-dialog>
+
+    <md-dialog-alert
+      :md-active.sync="success"
+      :md-title="successHeader"
+      :md-content="successMessage" />
+
+    <md-dialog-alert
+      :md-active.sync="failure"
+      :md-title="failHeader"
+      :md-content="failMessage" />
 
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App',
-  data: function() {
-    return {
-      navigation: false,
-      showRegisterDialog: false
+  import Register from './components/Register.vue'
+  import Login from './components/Login.vue'
+
+  export default {
+    components: {
+      Login,
+      Register
+    },
+
+    name: 'App',
+
+    data: () => {
+      return {
+        navigation: false,
+        showRegisterDialog: false,
+        showLoginDialog: false,
+
+        success: false,
+        successHeader: '',
+        successMessage: '',
+
+        failure: false,
+        failHeader: '',
+        failMessage: ''
+      }
+    },
+
+    methods: {
+      onCloseLoginModal({res, msg}) {
+        this.showLoginDialog = false
+
+        if (res) {
+
+          this.success = true
+          this.successHeader = 'Login successful!'
+          this.successMessage = 'You logged in successfully! \\o/'
+        } else {
+
+          this.failure = true
+          this.failHeader = 'Login failed! ;('
+          this.failMessage = msg
+        }
+      },
+
+      onCloseRegisterModal({res, msg}) {
+        this.showRegisterDialog = false
+
+        if (res) {
+
+          this.success = true
+          this.successHeader = 'Register successful!'
+          this.successMessage = 'You have been registered successfully! \\o/'
+        } else {
+
+          this.failure = true
+          this.failHeader = 'Register failed! ;('
+          this.failMessage = msg
+        }
+      }
     }
   }
-}
 </script>
 
 <style>
@@ -143,13 +186,6 @@ h1 {
 
 .register {
   background: linear-gradient(171deg,#a851e2,#b367e6);
-}
-
-.md-dialog {
-  width: 500px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-bottom: 30px;
 }
 
 /* .form-holder {
