@@ -25,7 +25,10 @@ public class User {
     private String role;
     private String hashedPass;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH})
     private List<Book> todo;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Book> finished;

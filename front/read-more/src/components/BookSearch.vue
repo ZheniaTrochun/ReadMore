@@ -24,12 +24,11 @@
           </md-card-header>
 
           <md-card-content>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
+            {{ book.description }}
           </md-card-content>
 
           <md-card-actions>
-            <md-button class="md-primary">Start</md-button>
-            <md-button class="md-accent">Delete</md-button>
+            <md-button class="md-primary" @click="add(book)">TODO</md-button>
           </md-card-actions>
 
         </md-ripple>
@@ -71,6 +70,20 @@
             this.books = res.data
           })
           .catch((err) => console.error(err))
+      },
+
+      add(book) {
+        const axiosConfig = {
+          headers: {
+            'authorization': getToken()
+          }
+        }
+
+        axios.post('http://localhost:8080/user/todo', book, axiosConfig)
+        .then((res) => {
+          this.books = this.books.filter((b) => b !== book)
+          this.$emit('added', book)
+        })
       }
     },
 
@@ -91,8 +104,7 @@
     padding-right: 50px;
     padding-bottom: 30px;
     padding-top: 40px;
-    max-height: 70vh;
-    /*width: 100%;*/
+    max-height: 80vh;
   }
 
   .inputs {

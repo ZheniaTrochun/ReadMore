@@ -56,4 +56,16 @@ public class UserServiceImpl implements UserService {
                 .map(User::getTodo)
                 .orElse(new ArrayList<>());
     }
+
+    @Override
+    @Transactional
+    public void addTodo(Book book, String username) {
+        userRepository.findUserByName(username)
+                .ifPresent(user -> {
+                    if (!user.getTodo().contains(book)) {
+                        user.getTodo().add(book);
+                        userRepository.save(user);
+                    }
+                });
+    }
 }

@@ -23,7 +23,7 @@
             </md-card-header>
 
             <md-card-content>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
+              {{ book.description }}
             </md-card-content>
 
             <md-card-actions>
@@ -41,7 +41,7 @@
     </div>
 
     <md-dialog :md-active.sync="showSearchDialog">
-      <book-search @clicked="onCloseSearchModal"/>
+      <book-search @added="onAdded" @clicked="onCloseSearchModal"/>
     </md-dialog>
 
 
@@ -76,6 +76,11 @@
     methods: {
       onCloseSearchModal() {
         this.showSearchDialog = false;
+      },
+
+      onAdded(book) {
+        this.books.push(book)
+        this.showSearchDialog = false;
       }
     },
 
@@ -85,38 +90,7 @@
 
         searchCriteria: '',
         msg: 'Welcome to Your Vue.js App',
-        books: [
-          {
-            id: 1,
-            name: 'Harry Potter',
-            author: 'J. K. Rowling',
-          },
-          {
-            id: 1,
-            name: 'Harry Potter 2',
-            author: 'J. K. Rowling',
-          },
-          {
-            id: 1,
-            name: 'Harry Potter 3',
-            author: 'J. K. Rowling',
-          },
-          {
-            id: 1,
-            name: 'Harry Potter',
-            author: 'J. K. Rowling',
-          },
-          {
-            id: 1,
-            name: 'Harry Potter 2',
-            author: 'J. K. Rowling',
-          },
-          {
-            id: 1,
-            name: 'Harry Potter 3',
-            author: 'J. K. Rowling',
-          }
-        ]
+        books: []
       }
     }
   }

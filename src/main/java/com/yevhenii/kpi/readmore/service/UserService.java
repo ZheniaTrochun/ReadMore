@@ -13,4 +13,6 @@ public interface UserService {
             throws UsernameIsAlreadyTakenException, EmailIsAlreadyTakenException;
 
     List<Book> getUserTodos(String username);
+
+    void addTodo(Book book, String username);
 }
