@@ -10,14 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/user/todo")
@@ -47,8 +45,8 @@ public class TodoController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> addUserTodos(@RequestBody BookResponse book, HttpServletRequest request) {
-        LOGGER.debug("Adding todo for useer, book = " + book.toString());
 
+        LOGGER.debug("Adding todo for user, book = " + book.toString());
         Optional<String> username = Optional.ofNullable((String) request.getAttribute("user"));
 
         username
@@ -56,4 +54,17 @@ public class TodoController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteUserTodo(@RequestParam Long bookId, HttpServletRequest request) {
+
+        LOGGER.debug("Deleting todo for user, book = " + bookId);
+        Optional<String> username = Optional.ofNullable((String) request.getAttribute("user"));
+
+        username
+                .ifPresent(name -> userService.deleteTodo(bookId, name));
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

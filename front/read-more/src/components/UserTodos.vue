@@ -27,8 +27,8 @@
             </md-card-content>
 
             <md-card-actions>
-              <md-button class="md-primary">Start</md-button>
-              <md-button class="md-accent">Delete</md-button>
+              <md-button class="md-primary" @click="toStarted(book)">Start</md-button>
+              <md-button class="md-accent" @click="removeFromTodo(book)">Delete</md-button>
             </md-card-actions>
 
           </md-ripple>
@@ -81,6 +81,23 @@
       onAdded(book) {
         this.books.push(book)
         this.showSearchDialog = false;
+      },
+
+      toStarted(book) {
+        const axiosConfig = {
+          headers: {
+            'authorization': getToken()
+          }
+        }
+
+        axios.post('http://localhost:8080/user/progress', book, axiosConfig)
+          .then(() => this.books = this.books.filter((b) => b !== book))
+      },
+
+      removeFromTodo(book) {
+        axios.delete('http://localhost:8080/user/todo', { params: { bookId: book.id }, headers: { 'authorization': getToken() } })
+          .then((res) => this.books = this.books.filter((b) => b !== book))
+          .catch((err) => console.error(err))
       }
     },
 

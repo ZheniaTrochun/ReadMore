@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -26,13 +27,15 @@ public class User {
     private String hashedPass;
 
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST,
-                    CascadeType.MERGE,
-                    CascadeType.REFRESH})
+            cascade = CascadeType.ALL)
     private List<Book> todo;
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private List<Book> finished;
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private List<Book> inProgress;
 
     public User() {

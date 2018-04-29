@@ -12,7 +12,6 @@ import java.util.function.Function;
 @Component
 public class GoogleBookResponseToBookResponseConverter implements Function<GoogleBookResponse, BookResponse> {
 
-//    todo refactor this!
     @Override
     public BookResponse apply(GoogleBookResponse googleBookResponse) {
         VolumeInfo volumeInfo = googleBookResponse.getVolumeInfo();
@@ -30,9 +29,9 @@ public class GoogleBookResponseToBookResponseConverter implements Function<Googl
     }
 
     private Integer constructYear(VolumeInfo volumeInfo) {
-        if (Objects.isNull(volumeInfo)
-                || Objects.isNull(volumeInfo.getPublishedDate())
-                || volumeInfo.getPublishedDate().isEmpty()) {
+        if (Objects.isNull(volumeInfo) ||
+                Objects.isNull(volumeInfo.getPublishedDate()) ||
+                volumeInfo.getPublishedDate().isEmpty()) {
 
             return null;
         }
@@ -45,12 +44,11 @@ public class GoogleBookResponseToBookResponseConverter implements Function<Googl
 //    todo create default link
     private String constructImage(VolumeInfo volumeInfo) {
 
-        return Objects.isNull(volumeInfo.getImageLinks()) ? ""
-                : Strings.isNotBlank(volumeInfo.getImageLinks().getLarge())
-                    ? volumeInfo.getImageLinks().getLarge()
-                        : Strings.isNotBlank(volumeInfo.getImageLinks().getThumbnail())
-                            ? volumeInfo.getImageLinks().getThumbnail()
-                                : "";
-
+        return Objects.isNull(volumeInfo.getImageLinks()) ? "" :
+                Strings.isNotBlank(volumeInfo.getImageLinks().getLarge()) ?
+                    volumeInfo.getImageLinks().getLarge() :
+                        Strings.isNotBlank(volumeInfo.getImageLinks().getThumbnail()) ?
+                            volumeInfo.getImageLinks().getThumbnail() :
+                                "";
     }
 }

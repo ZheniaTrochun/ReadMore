@@ -14,5 +14,19 @@ public interface UserService {
 
     List<Book> getUserTodos(String username);
 
+    List<Book> getUserProgress(String username);
+
+    List<Book> getUserFinished(String username);
+
     void addTodo(Book book, String username);
+
+    void addProgress(Book book, String username);
+
+    void addFinished(Book book, String username);
+
+    void deleteTodo(Long bookId, String username);
+
+    void deleteProgress(Long bookId, String username);
+
+    void deleteFinished(Long bookId, String username);
 }
