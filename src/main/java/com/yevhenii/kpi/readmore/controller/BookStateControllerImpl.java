@@ -3,6 +3,8 @@ package com.yevhenii.kpi.readmore.controller;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.State;
 import com.yevhenii.kpi.readmore.service.BookStateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.List;
 @RequestMapping("/book/state")
 public class BookStateControllerImpl implements BookStateController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookStateControllerImpl.class);
+
     private final BookStateService bookStateService;
 
     @Autowired
@@ -26,6 +30,8 @@ public class BookStateControllerImpl implements BookStateController {
     @Override
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUserTodo(@RequestParam Long bookId, ServletRequest request) {
+
+        LOGGER.info("Delete method called");
 
         boolean success =
                 bookStateService.deleteState(bookId, (String) request.getAttribute("user"));

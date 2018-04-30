@@ -32,7 +32,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, @Email String email, String role, String hashedPass) {
+    public User(String name, @Email String email, String hashedPass, String role) {
         this.name = name;
         this.email = email;
         this.role = role;

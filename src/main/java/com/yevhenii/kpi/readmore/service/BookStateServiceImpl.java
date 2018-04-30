@@ -8,6 +8,7 @@ import com.yevhenii.kpi.readmore.repository.BookStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,6 +64,7 @@ public class BookStateServiceImpl implements BookStateService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteState(Long bookId, String username) {
         try {
             bookStateRepository.deleteAllByUser_NameAndBook_Id(username, bookId);
