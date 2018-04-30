@@ -16,23 +16,12 @@
     </div>
 
     <div class="items">
-      <md-card v-for="book in books">
-        <md-ripple>
-          <md-card-header>
-            <div class="md-title">{{ book.name }}</div>
-            <div class="md-subhead">{{ book.author }}</div>
-          </md-card-header>
-
-          <md-card-content>
-            {{ book.description }}
-          </md-card-content>
-
-          <md-card-actions>
-            <md-button class="md-primary" @click="add(book)">TODO</md-button>
-          </md-card-actions>
-
-        </md-ripple>
-      </md-card>
+      <book v-for="book in books"
+            :book="book"
+            :enableDelete="false"
+            processText="TODO"
+            processUrl="http://localhost:8080/book/state/todo"
+            @processed="add"/>
     </div>
 
     <md-dialog-actions>
@@ -47,8 +36,10 @@
   import axios from 'axios'
 
   import { getToken } from '../auth/auth'
+  import Book from "./Book.vue";
 
   export default {
+    components: {Book},
     name: 'book-search',
 
     methods: {
@@ -79,7 +70,7 @@
           }
         }
 
-        axios.post('http://localhost:8080/user/todo', book, axiosConfig)
+        axios.post('http://localhost:8080/book/state/todo', book, axiosConfig)
         .then((res) => {
           this.books = this.books.filter((b) => b !== book)
           this.$emit('added', book)

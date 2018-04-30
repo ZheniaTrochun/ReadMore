@@ -15,24 +15,14 @@
       <h1 class="todos">User TODOs</h1>
 
       <div class="items">
-        <md-card v-for="book in books">
-          <md-ripple>
-            <md-card-header>
-              <div class="md-title">{{ book.name }}</div>
-              <div class="md-subhead">{{ book.author }}</div>
-            </md-card-header>
-
-            <md-card-content>
-              {{ book.description }}
-            </md-card-content>
-
-            <md-card-actions>
-              <md-button class="md-primary" @click="toStarted(book)">Start</md-button>
-              <md-button class="md-accent" @click="removeFromTodo(book)">Delete</md-button>
-            </md-card-actions>
-
-          </md-ripple>
-        </md-card>
+        <book v-for="book in books"
+              :book="book"
+              :enableDelete="true"
+              deleteUrl="http://localhost:8080/book/state/"
+              processText="Start"
+              processUrl="http://localhost:8080/book/state/progress"
+              @processed="onRemoved"
+              @removed="onRemoved"/>
       </div>
 
       <md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">
@@ -54,14 +44,19 @@
 
   import { getToken } from '../auth/auth'
   import BookSearch from "./BookSearch.vue";
+  import Book from "./Book.vue";
 
   export default {
-    components: {BookSearch},
+    components: {
+      Book,
+      BookSearch
+    },
+
     name: 'userTodos',
 
     mounted() {
       axios.get(
-        'http://localhost:8080/user/todo',
+        'http://localhost:8080/book/state/todo',
         {
           headers: {
             'authorization': getToken()
@@ -83,30 +78,15 @@
         this.showSearchDialog = false;
       },
 
-      toStarted(book) {
-        const axiosConfig = {
-          headers: {
-            'authorization': getToken()
-          }
-        }
-
-        axios.post('http://localhost:8080/user/progress', book, axiosConfig)
-          .then(() => this.books = this.books.filter((b) => b !== book))
-      },
-
-      removeFromTodo(book) {
-        axios.delete('http://localhost:8080/user/todo', { params: { bookId: book.id }, headers: { 'authorization': getToken() } })
-          .then((res) => this.books = this.books.filter((b) => b !== book))
-          .catch((err) => console.error(err))
+      onRemoved(book) {
+        console.log("removed")
+        this.books = this.books.filter((b) => b !== book)
       }
     },
 
     data () {
       return {
         showSearchDialog: false,
-
-        searchCriteria: '',
-        msg: 'Welcome to Your Vue.js App',
         books: []
       }
     }
