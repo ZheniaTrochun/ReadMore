@@ -10,4 +10,8 @@ public interface BookService {
     Optional<Book> findOneBookByNameAndAuthor(String name, String author);
 
     List<Book> findManyBooksByNameAndAuthor(String name, String author);
+
+    Book save(Book book);
+
+    Book saveOrGetIfPresent(Book book);
 }
