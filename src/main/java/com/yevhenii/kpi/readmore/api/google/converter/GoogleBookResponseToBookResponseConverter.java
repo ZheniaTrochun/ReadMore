@@ -1,5 +1,6 @@
 package com.yevhenii.kpi.readmore.api.google.converter;
 
+import com.yevhenii.kpi.readmore.api.google.model.ImageLinks;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.VolumeInfo;
@@ -11,6 +12,9 @@ import java.util.function.Function;
 
 @Component
 public class GoogleBookResponseToBookResponseConverter implements Function<GoogleBookResponse, BookResponse> {
+
+//    todo move to properties
+    private final static String DEFAULT_IMAGE = "";
 
     @Override
     public BookResponse apply(GoogleBookResponse googleBookResponse) {
@@ -43,12 +47,20 @@ public class GoogleBookResponseToBookResponseConverter implements Function<Googl
 
 //    todo create default link
     private String constructImage(VolumeInfo volumeInfo) {
+        ImageLinks imageLinks = volumeInfo.getImageLinks();
 
-        return Objects.isNull(volumeInfo.getImageLinks()) ? "" :
-                Strings.isNotBlank(volumeInfo.getImageLinks().getLarge()) ?
-                    volumeInfo.getImageLinks().getLarge() :
-                        Strings.isNotBlank(volumeInfo.getImageLinks().getThumbnail()) ?
-                            volumeInfo.getImageLinks().getThumbnail() :
-                                "";
+        if (Objects.isNull(imageLinks)) {
+            return DEFAULT_IMAGE;
+        }
+
+        if (Strings.isNotBlank(imageLinks.getLarge())) {
+            return imageLinks.getLarge();
+        }
+
+        if (Strings.isNotBlank(imageLinks.getThumbnail())) {
+            return imageLinks.getThumbnail();
+        }
+
+        return DEFAULT_IMAGE;
     }
 }
