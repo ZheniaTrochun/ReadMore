@@ -53,12 +53,12 @@ public class Book {
         Book book = (Book) o;
         return Objects.equals(getName(), book.getName()) &&
                 Objects.equals(getAuthor(), book.getAuthor()) &&
-                Objects.equals(getYear(), book.getYear());
+                Objects.equals(getDescription(), book.getDescription());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), getName(), getAuthor(), getYear());
+        return Objects.hash(super.hashCode(), getName(), getAuthor(), getDescription());
     }
 }

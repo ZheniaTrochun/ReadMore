@@ -19,6 +19,7 @@
       <book v-for="book in books"
             :book="book"
             :enableDelete="false"
+            :enableProcess="true"
             processText="TODO"
             processUrl="http://localhost:8080/book/state/todo"
             @processed="add"/>

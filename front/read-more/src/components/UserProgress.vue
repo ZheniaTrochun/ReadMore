@@ -12,7 +12,7 @@
 
     <div class="container">
 
-      <h1 class="todos">User TODOs</h1>
+      <h1 class="todos">User progress</h1>
 
       <div class="items">
         <book v-for="book in books"
@@ -20,8 +20,8 @@
               :enableDelete="true"
               :enableProcess="true"
               deleteUrl="http://localhost:8080/book/state/"
-              processText="Start"
-              processUrl="http://localhost:8080/book/state/progress"
+              processText="Finish"
+              processUrl="http://localhost:8080/book/state/finished"
               @processed="onRemoved"
               @removed="onRemoved"/>
       </div>
@@ -48,16 +48,12 @@
   import Book from "./Book.vue";
 
   export default {
-    components: {
-      Book,
-      BookSearch
-    },
-
-    name: 'userTodos',
+    components: {BookSearch, Book},
+    name: 'userProgress',
 
     mounted() {
       axios.get(
-        'http://localhost:8080/book/state/todo',
+        'http://localhost:8080/book/state/progress',
         {
           headers: {
             'authorization': getToken()
@@ -70,24 +66,43 @@
     },
 
     methods: {
-      onCloseSearchModal() {
-        this.showSearchDialog = false;
-      },
-
-      onAdded(book) {
-        this.books.push(book)
-        this.showSearchDialog = false;
-      },
-
       onRemoved(book) {
-        console.log("removed")
         this.books = this.books.filter((b) => b !== book)
       }
+
+      // onCloseSearchModal() {
+      //   this.showSearchDialog = false;
+      // },
+
+      // onAdded(book) {
+      //   this.books.push(book)
+      //   this.showSearchDialog = false;
+      // },
+
+      // toFinished(book) {
+      //   const axiosConfig = {
+      //     headers: {
+      //       'authorization': getToken()
+      //     }
+      //   }
+      //
+      //   axios.post('http://localhost:8080/user/finished', book, axiosConfig)
+      //     .then(() => this.books = this.books.filter((b) => b !== book))
+      // },
+
+      // removeFromProgress(book) {
+      //   axios.delete('http://localhost:8080/user/progress', { params: { bookId: book.id }, headers: { 'authorization': getToken() } })
+      //     .then((res) => this.books = this.books.filter((b) => b !== book))
+      //     .catch((err) => console.error(err))
+      // }
     },
 
     data () {
       return {
         showSearchDialog: false,
+
+        searchCriteria: '',
+        msg: 'Welcome to Your Vue.js App',
         books: []
       }
     }

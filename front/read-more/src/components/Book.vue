@@ -17,7 +17,7 @@
       </md-card-content>
 
       <md-card-actions>
-        <md-button class="md-primary" @click="toStarted(book)">{{ processText }}</md-button>
+        <md-button class="md-primary" v-if="enableProcess" @click="toStarted(book)">{{ processText }}</md-button>
         <md-button class="md-accent" v-if="enableDelete" @click="removeFromTodo(book)">Delete</md-button>
       </md-card-actions>
 
@@ -46,6 +46,10 @@
       processUrl: {
         type: String,
         required: true
+      },
+      enableProcess: {
+        type: Boolean,
+        required: false
       },
       enableDelete: {
         type: Boolean,
