@@ -11,15 +11,14 @@ public class UserReview {
     private Integer rating;
     private String description;
 
-    @Column(columnDefinition = "text")
-    private String notes;
+    private String author;
 
     public UserReview() {
     }
 
-    public UserReview(Integer rating, String description, String notes) {
+    public UserReview(Integer rating, String description, String author) {
         this.rating = rating;
         this.description = description;
-        this.notes = notes;
+        this.author = author;
     }
 }

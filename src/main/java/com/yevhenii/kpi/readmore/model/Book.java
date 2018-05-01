@@ -1,12 +1,12 @@
 package com.yevhenii.kpi.readmore.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -32,7 +32,12 @@ public class Book {
     private String genre;
     private String imageUrl;
 
+    @ElementCollection
+    @CollectionTable(name = "book_review", joinColumns = @JoinColumn(name = "book_id"))
+    private List<UserReview> reviews;
+
     public Book() {
+        this.reviews = new ArrayList<>();
     }
 
     public Book(Long id, @NotNull String name, @NotNull String author,
@@ -44,6 +49,19 @@ public class Book {
         this.description = description;
         this.genre = genre;
         this.imageUrl = imageUrl;
+        this.reviews = new ArrayList<>();
+    }
+
+    public Book(Long id, @NotNull String name, @NotNull String author, Integer year,
+                String description, String genre, String imageUrl, List<UserReview> reviews) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.year = year;
+        this.description = description;
+        this.genre = genre;
+        this.imageUrl = imageUrl;
+        this.reviews = reviews;
     }
 
     @Override

@@ -24,8 +24,9 @@ public class BookState {
     @Enumerated(value = EnumType.STRING)
     private State state;
 
-    @Embedded
-    private UserReview userReview;
+    @Column(columnDefinition = "text")
+    private String notes;
+
 
     public BookState() {
     }
@@ -43,11 +44,11 @@ public class BookState {
         this.state = state;
     }
 
-    public BookState(Long id, User user, Book book, State state, UserReview userReview) {
+    public BookState(Long id, User user, Book book, State state, String notes) {
         this.id = id;
         this.user = user;
         this.book = book;
         this.state = state;
-        this.userReview = userReview;
+        this.notes = notes;
     }
 }

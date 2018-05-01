@@ -22,11 +22,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Boolean updateUserReview(String username, Long bookId, UserReview data) {
 
-        return bookStateRepository.findOneByUser_NameAndBook_Id(username, bookId)
-                .map(state -> {
-                    state.setUserReview(data);
-                    return bookStateRepository.save(state);
-                })
-                .isPresent();
+//        return bookStateRepository.findOneByUser_NameAndBook_Id(username, bookId)
+//                .map(state -> {
+//                    state.setUserReview(data);
+//                    return bookStateRepository.save(state);
+//                })
+//                .isPresent();
+        return null;
     }
 }
