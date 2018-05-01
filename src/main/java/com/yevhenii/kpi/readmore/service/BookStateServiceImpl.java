@@ -39,6 +39,7 @@ public class BookStateServiceImpl implements BookStateService {
     }
 
     @Override
+//    @Transactional
     public Boolean addTodoItem(Book book, String username) {
 
         return userService.findUserByUsername(username)
@@ -50,7 +51,7 @@ public class BookStateServiceImpl implements BookStateService {
     @Override
     public Boolean changeState(Book book, String username, State target) {
 
-        return bookStateRepository.findOneByUser_NameAndBook_Id(username, book.getId())
+        return bookStateRepository.findOneByUser_NameAndBook(username, book)
                 .flatMap(state -> {
                     if (state.getState().equals(target)){
                         return Optional.empty();
@@ -77,7 +78,7 @@ public class BookStateServiceImpl implements BookStateService {
     }
 
     private Optional<BookState> createBookState(Book book, User user) {
-        if (bookStateRepository.findOneByUser_NameAndBook_Id(user.getName(), book.getId()).isPresent()) {
+        if (bookStateRepository.findOneByUser_NameAndBook_NameAndBook_Author(user.getName(), book.getName(), book.getAuthor()).isPresent()) {
             return Optional.empty();
         }
 

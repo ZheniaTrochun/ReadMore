@@ -17,6 +17,7 @@ public class BookState {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Book book;
 

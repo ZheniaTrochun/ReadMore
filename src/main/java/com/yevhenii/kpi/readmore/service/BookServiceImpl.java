@@ -72,8 +72,13 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book saveOrGetIfPresent(Book book) {
         if (Objects.isNull(book.getId())) {
+            try {
 
-            return save(book);
+                return save(book);
+            } catch (Exception e) {
+
+                return bookRepository.findBookByNameAndAuthor(book.getName(), book.getAuthor()).get();
+            }
         }
 
         return bookRepository.getOne(book.getId());

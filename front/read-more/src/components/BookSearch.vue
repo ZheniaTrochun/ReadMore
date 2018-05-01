@@ -65,17 +65,7 @@
       },
 
       add(book) {
-        const axiosConfig = {
-          headers: {
-            'authorization': getToken()
-          }
-        }
-
-        axios.post('http://localhost:8080/book/state/todo', book, axiosConfig)
-        .then((res) => {
-          this.books = this.books.filter((b) => b !== book)
-          this.$emit('added', book)
-        })
+        this.$emit('added', book)
       }
     },
 
@@ -91,7 +81,7 @@
 
 <style>
   .search-holder {
-    width: 800px;
+    width: 100%;
     padding-left: 50px;
     padding-right: 50px;
     padding-bottom: 30px;

@@ -170,4 +170,8 @@
     bottom: 20px;
     right: 20px;
   }
+
+  .md-dialog {
+    width: 80%;
+  }
 </style>
