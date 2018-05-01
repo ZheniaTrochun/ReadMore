@@ -1,23 +1,12 @@
 package com.yevhenii.kpi.readmore.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
 @Data
-@NoArgsConstructor
+@Embeddable
 public class UserReview {
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     private Integer rating;
     private String description;
@@ -25,7 +14,12 @@ public class UserReview {
     @Column(columnDefinition = "text")
     private String notes;
 
-//    todo link
-//    private User user;
-//    private Book book;
+    public UserReview() {
+    }
+
+    public UserReview(Integer rating, String description, String notes) {
+        this.rating = rating;
+        this.description = description;
+        this.notes = notes;
+    }
 }

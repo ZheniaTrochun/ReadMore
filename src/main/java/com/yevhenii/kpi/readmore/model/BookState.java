@@ -24,6 +24,9 @@ public class BookState {
     @Enumerated(value = EnumType.STRING)
     private State state;
 
+    @Embedded
+    private UserReview userReview;
+
     public BookState() {
     }
 
@@ -38,5 +41,13 @@ public class BookState {
         this.user = user;
         this.book = book;
         this.state = state;
+    }
+
+    public BookState(Long id, User user, Book book, State state, UserReview userReview) {
+        this.id = id;
+        this.user = user;
+        this.book = book;
+        this.state = state;
+        this.userReview = userReview;
     }
 }

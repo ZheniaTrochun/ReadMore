@@ -17,6 +17,8 @@ public interface BookStateRepository extends JpaRepository<BookState, Long> {
 
     Optional<BookState> findOneByUser_NameAndBook(@NotNull String name, Book book);
 
+    Optional<BookState> findOneByUser_NameAndBook_Id(@NotNull String name, Long bookId);
+
     void deleteAllByUser_NameAndBook_Id(@NotNull String name, Long bookId);
 
     Optional<Object> findOneByUser_NameAndBook_NameAndBook_Author(@NotNull String name,
