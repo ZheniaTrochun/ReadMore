@@ -5,6 +5,7 @@ import com.yevhenii.kpi.readmore.api.RemoteBookApi;
 import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookResponseConverter;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBooksHolder;
+import com.yevhenii.kpi.readmore.properties.AppPropertyHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,12 @@ public class GoogleBookApi implements RemoteBookApi {
 
     @Autowired
     public GoogleBookApi(RestTemplate restTemplate,
-                         @Value("${google.books.api.key}") String apiKey,
+                         AppPropertyHolder propertyHolder,
                          GoogleBookResponseToBookResponseConverter converter) {
 
         this.restTemplate = restTemplate;
-        this.googleBookApiUrl = "https://www.googleapis.com/books/v1/volumes%s&key=" + apiKey;
+        this.googleBookApiUrl = "https://www.googleapis.com/books/v1/volumes%s&key=" +
+                propertyHolder.getGooglebooks().getKey();
         this.converter = converter;
     }
 

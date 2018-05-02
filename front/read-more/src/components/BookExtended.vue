@@ -108,4 +108,8 @@
     max-height: 80vh;
     overflow: auto;
   }
+
+  textarea {
+    min-height: 300px !important;
+  }
 </style>

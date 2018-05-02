@@ -1,5 +1,6 @@
 package com.yevhenii.kpi.readmore.security;
 
+import com.yevhenii.kpi.readmore.properties.AppPropertyHolder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,11 @@ public class TokenAuthenticationService {
     private static TokenAuthenticationService instance;
 
     @Autowired
-    public TokenAuthenticationService(
-            @Value("${security.jwt.expiration}") long expiration,
-            @Value("${security.jwt.secret}") String secret,
-            @Value("${security.jwt.prefix}") String prefix,
-            @Value("${security.jwt.header}") String header) {
-
-        this.expiration = expiration;
-        this.secret = secret;
-        this.prefix = prefix;
-        this.header = header;
-
+    public TokenAuthenticationService(AppPropertyHolder propertyHolder) {
+        this.expiration = propertyHolder.getSecurity().getExpiration();
+        this.secret = propertyHolder.getSecurity().getSecret();
+        this.prefix = propertyHolder.getSecurity().getPrefix();
+        this.header = propertyHolder.getSecurity().getHeader();
         instance = this;
     }
 
