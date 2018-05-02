@@ -29,14 +29,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final BookRepository bookRepository;
-
     private final PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
         this.encoder = encoder;
     }
 
@@ -57,113 +54,9 @@ public class UserServiceImpl implements UserService {
                 new User(username, email, encoder.encode(password), "ROLE_USER"));
     }
 
-//    @Transactional
-//    public List<Book> getBooksByStateAndUser(String username, State state) {
-//
-//        return userRepository.findUserByName(username)
-//                .map(user -> user.getBooks()
-//                        .stream()
-//                        .filter(b -> b.getState().equals(state))
-//                        .map(BookState::getBook)
-//                        .collect(Collectors.toList()))
-//                .orElse(new ArrayList<>());
-//    }
-
     @Override
     public Optional<User> findUserByUsername(String username) {
 
         return userRepository.findUserByName(username);
     }
-
-//
-//    @Override
-//    @Transactional
-//    @Async
-//    public void addTodo(Book book, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    if (!user.getTodo().contains(book)) {
-//                        if (book.getId() != null) {
-//                            Optional.ofNullable(bookRepository.getOne(book.getId()))
-//                                    .ifPresent(b -> user.getTodo().add(b));
-//                        } else {
-//                            user.getTodo().add(book);
-//                        }
-//                        userRepository.save(user);
-//                    }
-//                });
-//    }
-
-//    @Override
-//    @Transactional
-//    @Async
-//    public void addProgress(Book book, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    if (!user.getInProgress().contains(book)) {
-//                        if (book.getId() != null) {
-//                            Optional.ofNullable(bookRepository.getOne(book.getId()))
-//                                    .ifPresent(b -> {
-//                                        user.getInProgress().add(b);
-//                                        user.getTodo().remove(b);
-//                                    });
-//                        } else {
-//                            user.getInProgress().add(book);
-//                        }
-//                        userRepository.save(user);
-//                    }
-//                });
-//    }
-
-//    @Override
-//    @Transactional
-//    @Async
-//    public void addFinished(Book book, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    if (!user.getFinished().contains(book)) {
-//                        if (book.getId() != null) {
-//                            Optional.ofNullable(bookRepository.getOne(book.getId()))
-//                                    .ifPresent(b -> {
-//                                        user.getFinished().add(b);
-//                                        user.getInProgress().remove(b);
-//                                        user.getTodo().remove(b);
-//                                    });
-//                        } else {
-//                            user.getInProgress().add(book);
-//                        }
-//                        userRepository.save(user);
-//                    }
-//                });
-//    }
-
-//    @Override
-//    @Transactional
-//    public void deleteTodo(Long bookId, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    user.getTodo().remove(bookRepository.getOne(bookId));
-//                    userRepository.save(user);
-//                });
-//    }
-
-//    @Override
-//    @Transactional
-//    public void deleteProgress(Long bookId, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    user.getInProgress().remove(bookRepository.getOne(bookId));
-//                    userRepository.save(user);
-//                });
-//    }
-
-//    @Override
-//    @Transactional
-//    public void deleteFinished(Long bookId, String username) {
-//        userRepository.findUserByName(username)
-//                .ifPresent(user -> {
-//                    user.getFinished().remove(bookRepository.getOne(bookId));
-//                    userRepository.save(user);
-//                });
-//    }
 }

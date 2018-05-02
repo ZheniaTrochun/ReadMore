@@ -18,7 +18,8 @@ public class BookResponse {
     public BookResponse() {
     }
 
-    public BookResponse(String id, String name, String author, String genre, Integer year, String description, String imageLink) {
+    public BookResponse(String id, String name, String author, String genre,
+                        Integer year, String description, String imageLink) {
         this.id = id;
         this.name = name;
         this.author = author;

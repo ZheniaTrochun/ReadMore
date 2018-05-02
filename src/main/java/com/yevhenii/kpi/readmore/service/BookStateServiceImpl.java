@@ -72,13 +72,32 @@ public class BookStateServiceImpl implements BookStateService {
 
             return true;
         } catch (Exception e) {
-
             return false;
         }
     }
 
+    @Override
+    public Optional<String> getUserNotes(Long bookId, String username) {
+
+        return bookStateRepository.findOneByUser_NameAndBook_Id(username, bookId)
+                .map(BookState::getNotes);
+    }
+
+    @Override
+    public Boolean updateUserNotes(String notes, Long bookId, String username) {
+
+        return bookStateRepository.findOneByUser_NameAndBook_Id(username, bookId)
+                .map(state -> {
+                    state.setNotes(notes);
+                    return bookStateRepository.save(state);
+                })
+                .isPresent();
+    }
+
     private Optional<BookState> createBookState(Book book, User user) {
-        if (bookStateRepository.findOneByUser_NameAndBook_NameAndBook_Author(user.getName(), book.getName(), book.getAuthor()).isPresent()) {
+        if (bookStateRepository.findOneByUser_NameAndBook_NameAndBook_Author(user.getName(),
+                        book.getName(), book.getAuthor()).isPresent()) {
+
             return Optional.empty();
         }
 
