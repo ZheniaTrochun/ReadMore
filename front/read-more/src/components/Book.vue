@@ -17,11 +17,16 @@
       </md-card-content>
 
       <md-card-actions>
+        <md-button class="md-primary" v-if="book.id" @click="showExtended = true">Show extended</md-button>
         <md-button class="md-primary" v-if="enableProcess" @click="toStarted(book)">{{ processText }}</md-button>
         <md-button class="md-accent" v-if="enableDelete" @click="removeFromTodo(book)">Delete</md-button>
       </md-card-actions>
 
     </md-ripple>
+
+    <md-dialog :md-active.sync="showExtended">
+      <book-ext :book="book"/>
+    </md-dialog>
   </md-card>
 </template>
 
@@ -30,8 +35,10 @@
   import axios from 'axios'
 
   import { getToken } from '../auth/auth'
+  import BookExt from "./BookExtended.vue";
 
   export default {
+    components: {BookExt},
     name: 'book',
 
     props: {
@@ -91,11 +98,7 @@
 
     data () {
       return {
-        showSearchDialog: false,
-
-        searchCriteria: '',
-        msg: 'Welcome to Your Vue.js App',
-        books: []
+        showExtended: false
       }
     }
   }
@@ -139,4 +142,7 @@
     min-width: 300px;
   }
 
+  .md-dialog {
+    width: 80%;
+  }
 </style>

@@ -26,14 +26,14 @@
               @removed="onRemoved"/>
       </div>
 
-      <md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">
-        <md-icon>add</md-icon>
-      </md-button>
+      <!--<md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">-->
+        <!--<md-icon>add</md-icon>-->
+      <!--</md-button>-->
     </div>
 
-    <md-dialog :md-active.sync="showSearchDialog">
-      <book-search @added="onAdded" @clicked="onCloseSearchModal"/>
-    </md-dialog>
+    <!--<md-dialog :md-active.sync="showSearchDialog">-->
+      <!--<book-search @added="onAdded" @clicked="onCloseSearchModal"/>-->
+    <!--</md-dialog>-->
 
 
   </div>
@@ -70,9 +70,9 @@
         this.books = this.books.filter((b) => b !== book)
       }
 
-      // onCloseSearchModal() {
-      //   this.showSearchDialog = false;
-      // },
+//       onCloseSearchModal() {
+//         this.showSearchDialog = false;
+//       },
 
       // onAdded(book) {
       //   this.books.push(book)

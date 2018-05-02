@@ -2,6 +2,8 @@ package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.State;
+import com.yevhenii.kpi.readmore.model.dto.UserNotesDto;
+import com.yevhenii.kpi.readmore.model.response.NotesResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,10 @@ import java.util.List;
 public interface BookStateController {
 
     ResponseEntity<Void> deleteUserTodo(Long bookId, ServletRequest request);
+
+    ResponseEntity<NotesResponse> getUserNotes(Long bookId, ServletRequest request);
+
+    ResponseEntity<Void> updateUserNotes(UserNotesDto notes, ServletRequest request);
 
     ResponseEntity<List<Book>> getUserTodo(ServletRequest request);
 

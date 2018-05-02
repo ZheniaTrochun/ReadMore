@@ -14,7 +14,5 @@ public interface UserService {
     User register(String username, String email, String password)
             throws UsernameIsAlreadyTakenException, EmailIsAlreadyTakenException;
 
-//    List<Book> getBooksByStateAndUser(String username, State state);
-
     Optional<User> findUserByUsername(String username);
 }
