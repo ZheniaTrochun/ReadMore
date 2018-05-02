@@ -32,19 +32,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public Optional<Book> findOneBookByNameAndAuthor(String name, String author) {
 
-        Optional<Book> bookFromDb =
-                bookRepository.findBookByNameContainingAndAuthorContaining(name, author);
-
-        if (bookFromDb.isPresent()) {
-            return bookFromDb;
-        }
-
-        return bookApi.getOneBookByNameAndAuthor(name, author)
-                .map(bookConverter)
-                .map(b -> {
-                    bookRepository.save(b);
-                    return b;
-                });
+        return bookRepository.findBookByNameContainingAndAuthorContaining(name, author)
+                .orElseGet(() -> bookApi
+                                .getOneBookByNameAndAuthor(name, author)
+                                .map(bookConverter)
+                                .map(bookRepository::save)
+                        );
     }
 
     @Override

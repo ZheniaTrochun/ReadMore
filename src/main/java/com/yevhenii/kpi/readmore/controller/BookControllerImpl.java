@@ -4,6 +4,7 @@ package com.yevhenii.kpi.readmore.controller;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class BookControllerImpl implements BookController {
 
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets books from DB and from remote api by name and author",
+            response = List.class,
+            produces = "application/json"
+    )
     @RequestMapping(method = GET, produces = "application/json")
     public Callable<ResponseEntity<List<BookResponse>>> findBooksByNameAndAuthor(@RequestParam String name,
                                                                                  @RequestParam String author) {
@@ -58,6 +65,12 @@ public class BookControllerImpl implements BookController {
 
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets one book by name and author",
+            response = BookResponse.class,
+            produces = "application/json"
+    )
     @RequestMapping(path = "/one", method = GET, produces = "application/json")
     public Callable<ResponseEntity<BookResponse>> findOneBookByNameAndAuthor(@RequestParam String name,
                                                                              @RequestParam String author) {
@@ -74,10 +87,5 @@ public class BookControllerImpl implements BookController {
                     .map(ResponseEntity::ok)
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         };
-    }
-
-    @RequestMapping(value = "/test", method = GET)
-    public String test() {
-        return "Hello";
     }
 }

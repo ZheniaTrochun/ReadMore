@@ -7,6 +7,7 @@ import com.yevhenii.kpi.readmore.model.dto.UserNotesDto;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.response.NotesResponse;
 import com.yevhenii.kpi.readmore.service.BookStateService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ public class BookStateControllerImpl implements BookStateController {
 
 
     @Override
+    @ApiOperation(
+            httpMethod = "DELETE",
+            value = "Removes book state for user (removes mapping between user and book)"
+    )
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUserTodo(@RequestParam Long bookId, ServletRequest request) {
 
@@ -55,6 +60,12 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets user notes for book",
+            response = NotesResponse.class,
+            produces = "application/json"
+    )
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public ResponseEntity<NotesResponse> getUserNotes(@RequestParam Long bookId, ServletRequest request) {
 
@@ -66,6 +77,10 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "PUT",
+            value = "Updates user's notes for book"
+    )
     @RequestMapping(value = "/notes", method = RequestMethod.PUT)
     public ResponseEntity<Void> updateUserNotes(@RequestBody UserNotesDto notes, ServletRequest request) {
 
@@ -79,6 +94,12 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets all books from user's todo-list",
+            response = List.class,
+            produces = "application/json"
+    )
     @RequestMapping(value = "/todo", method = RequestMethod.GET)
     public ResponseEntity<List<BookResponse>> getUserTodo(ServletRequest request) {
 
@@ -91,6 +112,10 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Adds new book to todo-list"
+    )
     @RequestMapping(value = "/todo", method = RequestMethod.POST)
     public ResponseEntity<Void> addUserTodo(@RequestBody Book book, ServletRequest request) {
 
@@ -103,6 +128,12 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets all books from user's progress-list",
+            response = List.class,
+            produces = "application/json"
+    )
     @RequestMapping(value = "/progress", method = RequestMethod.GET)
     public ResponseEntity<List<BookResponse>> getUserProgress(ServletRequest request) {
 
@@ -115,6 +146,10 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Adds new book to progress-list"
+    )
     @RequestMapping(value = "/progress", method = RequestMethod.POST)
     public ResponseEntity<Void> addUserProgress(@RequestBody Book book, ServletRequest request) {
 
@@ -127,6 +162,12 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets all books from user's finished-list",
+            response = List.class,
+            produces = "application/json"
+    )
     @RequestMapping(value = "/finished", method = RequestMethod.GET)
     public ResponseEntity<List<BookResponse>> getUserFinished(ServletRequest request) {
 
@@ -139,6 +180,10 @@ public class BookStateControllerImpl implements BookStateController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Adds new book to finished-list"
+    )
     @RequestMapping(value = "/finished", method = RequestMethod.POST)
     public ResponseEntity<Void> addUserFinished(@RequestBody Book book, ServletRequest request) {
 

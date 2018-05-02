@@ -6,6 +6,7 @@ import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.model.User;
 import com.yevhenii.kpi.readmore.model.dto.UserRegisterDto;
 import com.yevhenii.kpi.readmore.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Endpoint for users registration"
+    )
     @RequestMapping(value = "/register", method = POST)
     public ResponseEntity<Void> register(@RequestBody UserRegisterDto registerDto)
             throws RegistrationException {
