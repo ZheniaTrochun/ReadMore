@@ -1,10 +1,9 @@
 package com.yevhenii.kpi.readmore.security;
 
-import com.yevhenii.kpi.readmore.properties.AppPropertyHolder;
+import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

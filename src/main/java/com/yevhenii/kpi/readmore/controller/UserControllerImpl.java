@@ -1,6 +1,7 @@
 package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.exception.EmailIsAlreadyTakenException;
+import com.yevhenii.kpi.readmore.exception.RegistrationException;
 import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.model.User;
 import com.yevhenii.kpi.readmore.model.dto.UserRegisterDto;
@@ -32,7 +33,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @RequestMapping(value = "/register", method = POST)
     public ResponseEntity<Void> register(@RequestBody UserRegisterDto registerDto)
-            throws UsernameIsAlreadyTakenException, EmailIsAlreadyTakenException {
+            throws RegistrationException {
 
         User user = userService.register(registerDto.getUsername(),
                 registerDto.getEmail(),

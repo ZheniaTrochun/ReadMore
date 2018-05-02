@@ -23,6 +23,7 @@ public class User {
     @NotNull
     private String name;
     @Email
+    @NotNull
     private String email;
 
     private String role;
@@ -32,7 +33,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, @Email String email, String hashedPass, String role) {
+    public User(@NotNull String name, @Email @NotNull String email, @NotNull String hashedPass, String role) {
         this.name = name;
         this.email = email;
         this.role = role;

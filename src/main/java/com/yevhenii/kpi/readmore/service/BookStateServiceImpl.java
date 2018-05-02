@@ -39,7 +39,6 @@ public class BookStateServiceImpl implements BookStateService {
     }
 
     @Override
-//    @Transactional
     public Boolean addTodoItem(Book book, String username) {
 
         return userService.findUserByUsername(username)

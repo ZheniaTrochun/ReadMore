@@ -1,7 +1,7 @@
 package com.yevhenii.kpi.readmore.service;
 
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
-import com.yevhenii.kpi.readmore.converter.BookResponseToBookConverter;
+import com.yevhenii.kpi.readmore.utils.converter.BookResponseToBookConverter;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.repository.BookRepository;
 import org.slf4j.Logger;

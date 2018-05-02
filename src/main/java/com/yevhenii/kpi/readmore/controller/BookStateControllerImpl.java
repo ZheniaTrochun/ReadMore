@@ -1,8 +1,10 @@
 package com.yevhenii.kpi.readmore.controller;
 
+import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.State;
 import com.yevhenii.kpi.readmore.model.dto.UserNotesDto;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.response.NotesResponse;
 import com.yevhenii.kpi.readmore.service.BookStateService;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/book/state")
@@ -23,9 +26,12 @@ public class BookStateControllerImpl implements BookStateController {
 
     private final BookStateService bookStateService;
 
+    private final BookToBookResponseConverter converter;
+
     @Autowired
-    public BookStateControllerImpl(BookStateService bookStateService) {
+    public BookStateControllerImpl(BookStateService bookStateService, BookToBookResponseConverter converter) {
         this.bookStateService = bookStateService;
+        this.converter = converter;
     }
 
 
@@ -33,10 +39,15 @@ public class BookStateControllerImpl implements BookStateController {
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUserTodo(@RequestParam Long bookId, ServletRequest request) {
 
-        LOGGER.info("Delete method called");
+        String username = (String) request.getAttribute("user");
 
         boolean success =
-                bookStateService.deleteState(bookId, (String) request.getAttribute("user"));
+                bookStateService.deleteState(bookId, username);
+
+        LOGGER.debug(String.format("Deleting book state for user[%s], bookId[%d], result[%s]",
+                username,
+                bookId,
+                success ? "OK" : "FAILED"));
 
         return new ResponseEntity<>(
                 success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
@@ -69,13 +80,13 @@ public class BookStateControllerImpl implements BookStateController {
 
     @Override
     @RequestMapping(value = "/todo", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> getUserTodo(ServletRequest request) {
+    public ResponseEntity<List<BookResponse>> getUserTodo(ServletRequest request) {
 
         return ResponseEntity.ok(
-                bookStateService.getBooksByStateAndUser(
-                        (String) request.getAttribute("user"),
-                        State.TODO
-                )
+                bookStateService.getBooksByStateAndUser((String) request.getAttribute("user"), State.TODO)
+                        .stream()
+                        .map(converter)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -93,13 +104,13 @@ public class BookStateControllerImpl implements BookStateController {
 
     @Override
     @RequestMapping(value = "/progress", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> getUserProgress(ServletRequest request) {
+    public ResponseEntity<List<BookResponse>> getUserProgress(ServletRequest request) {
 
         return ResponseEntity.ok(
-                bookStateService.getBooksByStateAndUser(
-                        (String) request.getAttribute("user"),
-                        State.IN_PROGRESS
-                )
+                bookStateService.getBooksByStateAndUser((String) request.getAttribute("user"), State.IN_PROGRESS)
+                        .stream()
+                        .map(converter)
+                        .collect(Collectors.toList())
         );
     }
 
@@ -117,13 +128,13 @@ public class BookStateControllerImpl implements BookStateController {
 
     @Override
     @RequestMapping(value = "/finished", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> getUserFinished(ServletRequest request) {
+    public ResponseEntity<List<BookResponse>> getUserFinished(ServletRequest request) {
 
         return ResponseEntity.ok(
-                bookStateService.getBooksByStateAndUser(
-                        (String) request.getAttribute("user"),
-                        State.FINISHED
-                )
+                bookStateService.getBooksByStateAndUser((String) request.getAttribute("user"), State.FINISHED)
+                        .stream()
+                        .map(converter)
+                        .collect(Collectors.toList())
         );
     }
 

@@ -22,11 +22,10 @@ public class GoogleBookResponseToBookResponseConverter implements Function<Googl
 
         return BookResponse
                 .builder()
-                .id(googleBookResponse.getId())
                 .name(volumeInfo.getTitle())
                 .author(String.join(", ", volumeInfo.getAuthors()))
                 .genre(volumeInfo.getMainCategory())
-                .imageLink(constructImage(volumeInfo))
+                .imageUrl(constructImage(volumeInfo))
                 .year(constructYear(volumeInfo))
                 .description(volumeInfo.getDescription())
                 .build();

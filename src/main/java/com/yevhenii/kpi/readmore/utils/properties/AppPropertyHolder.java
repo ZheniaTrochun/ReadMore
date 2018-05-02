@@ -1,4 +1,4 @@
-package com.yevhenii.kpi.readmore.properties;
+package com.yevhenii.kpi.readmore.utils.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,6 +1,7 @@
 package com.yevhenii.kpi.readmore.service;
 
 import com.yevhenii.kpi.readmore.exception.EmailIsAlreadyTakenException;
+import com.yevhenii.kpi.readmore.exception.RegistrationException;
 import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.BookState;
@@ -37,10 +38,9 @@ public class UserServiceImpl implements UserService {
         this.encoder = encoder;
     }
 
-//    todo remove exceptions
     @Override
     public User register(String username, String email, String password)
-            throws UsernameIsAlreadyTakenException, EmailIsAlreadyTakenException {
+            throws RegistrationException {
 
         if (userRepository.findUserByName(username).isPresent()) {
             throw new UsernameIsAlreadyTakenException();
