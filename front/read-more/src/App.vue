@@ -8,7 +8,7 @@
 
         <img class="icon" src="./assets/logo.png">
 
-        <h1>Read More! ;)</h1>
+        <h1>Read More!</h1>
 
         <md-button class="md-icon-button menu-icon" @click="navigation = !navigation">
           <md-icon>menu</md-icon>
@@ -25,8 +25,8 @@
       <md-tabs v-if="navigation" class="teal" md-alignment="centered" md-sync-route>
         <md-tab id="tab-home" md-label="Home" md-icon="home" to="/"></md-tab>
         <md-tab id="tab-todo" v-if="isLoggedIn" md-label="Todo" md-icon="favorite" to="/todo"></md-tab>
-        <md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages" to="/components/tabs/home"></md-tab>
-        <md-tab id="tab-finished" v-if="isLoggedIn" md-label="Finished" md-icon="pages" to="/components/tabs/home"></md-tab>
+        <md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages" to="/progress"></md-tab>
+        <md-tab id="tab-finished" v-if="isLoggedIn" md-label="Finished" md-icon="pages" to="/finished"></md-tab>
       </md-tabs>
     </div>
 

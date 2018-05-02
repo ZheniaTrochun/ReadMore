@@ -61,6 +61,29 @@ public class BookServiceImpl implements BookService {
         return merge(booksFromDb, booksFromApi);
     }
 
+//    todo think about validations
+    @Override
+    public Book save(Book book) {
+
+        return bookRepository.save(book);
+    }
+
+//    main purpose of this method - avoid book data updating
+    @Override
+    public Book saveOrGetIfPresent(Book book) {
+        if (Objects.isNull(book.getId())) {
+            try {
+
+                return save(book);
+            } catch (Exception e) {
+
+                return bookRepository.findBookByNameAndAuthor(book.getName(), book.getAuthor()).get();
+            }
+        }
+
+        return bookRepository.getOne(book.getId());
+    }
+
     private List<Book> merge(List<Book> fromDb, List<Book> fromApi) {
 
         return Stream.concat(fromDb.stream(), fromApi.stream())

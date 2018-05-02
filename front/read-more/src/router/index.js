@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import Home from '@/components/Home'
 import UserTodos from '@/components/UserTodos.vue'
+import UserProgress from '@/components/UserProgress.vue'
+import UserFinished from '@/components/UserFinished.vue'
 
 Vue.use(Router)
 
@@ -17,6 +19,16 @@ export default new Router({
       path: '/todo',
       name: 'UserTodos',
       component: UserTodos
+    },
+    {
+      path: '/progress',
+      name: 'UserProgress',
+      component: UserProgress
+    },
+    {
+      path: '/finished',
+      name: 'UserFinished',
+      component: UserFinished
     }
   ]
 })

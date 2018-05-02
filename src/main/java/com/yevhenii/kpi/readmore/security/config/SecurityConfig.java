@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/book/test").permitAll()
                 .antMatchers("/actuator", "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
@@ -66,8 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-        System.out.println("test");
 
         authProvider.setPasswordEncoder(encoder());
         authProvider.setUserDetailsService(userDetailsService);

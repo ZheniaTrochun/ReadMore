@@ -22,7 +22,7 @@ public class UserReview {
     private Integer rating;
     private String description;
 
-    @Column(columnDefinition = "blob")
+    @Column(columnDefinition = "text")
     private String notes;
 
 //    todo link
