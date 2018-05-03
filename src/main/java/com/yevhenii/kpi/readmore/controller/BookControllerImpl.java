@@ -1,6 +1,8 @@
 package com.yevhenii.kpi.readmore.controller;
 
 
+import com.yevhenii.kpi.readmore.model.UserReview;
+import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
@@ -10,10 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -87,5 +88,34 @@ public class BookControllerImpl implements BookController {
                     .map(ResponseEntity::ok)
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         };
+    }
+
+    @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Endpoint for receiving reviews for book",
+            response = List.class,
+            produces = "application/json"
+    )
+    @RequestMapping(value = "/review", method = RequestMethod.GET)
+    public ResponseEntity<List<UserReview>> getReviews(@RequestParam Long bookId, ServletRequest request) {
+
+        return ResponseEntity.ok(bookService.getReviews(bookId));
+    }
+
+    @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Endpoint for new review creation"
+    )
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ResponseEntity<Void> addReviews(@RequestBody UserReviewDto review, ServletRequest request) {
+
+        UserReview review1 =
+                new UserReview(review.getRating(), review.getDescription(), (String) request.getAttribute("user"));
+
+        bookService.addReview(review1, review.getBookId());
+
+        return new ResponseEntity<>(HttpStatus.OK );
     }
 }

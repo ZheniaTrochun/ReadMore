@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,14 +38,15 @@ public class UserControllerImpl implements UserController {
             value = "Endpoint for users registration"
     )
     @RequestMapping(value = "/register", method = POST)
-    public ResponseEntity<Void> register(@RequestBody UserRegisterDto registerDto)
+    public ResponseEntity<Void> register(@RequestBody UserRegisterDto registerDto, BindingResult result)
             throws RegistrationException {
 
         User user = userService.register(registerDto.getUsername(),
                 registerDto.getEmail(),
-                registerDto.getPassword());
+                registerDto.getPassword(),
+                result);
 
-        LOGGER.info("user registered " + user.toString());
+        LOGGER.debug("User registered " + user.toString());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

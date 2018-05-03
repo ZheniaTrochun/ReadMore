@@ -55,7 +55,7 @@ public class BookStateControllerImpl implements BookStateController {
                 success ? "OK" : "FAILED"));
 
         return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
         );
     }
 
@@ -73,7 +73,7 @@ public class BookStateControllerImpl implements BookStateController {
 
         return bookStateService.getUserNotes(bookId, username)
                 .map(notes -> ResponseEntity.ok(new NotesResponse(notes)))
-                .orElse(ResponseEntity.status(404).build());
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BookStateControllerImpl implements BookStateController {
         Boolean success = bookStateService.updateUserNotes(notes.getNotes(), notes.getBookId(), username);
 
         return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
         );
     }
 
@@ -123,7 +123,7 @@ public class BookStateControllerImpl implements BookStateController {
                 bookStateService.addTodoItem(book, (String) request.getAttribute("user"));
 
         return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
         );
     }
 
@@ -157,7 +157,7 @@ public class BookStateControllerImpl implements BookStateController {
                 bookStateService.changeState(book, (String) request.getAttribute("user"), State.IN_PROGRESS);
 
         return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
         );
     }
 
@@ -191,7 +191,7 @@ public class BookStateControllerImpl implements BookStateController {
                 bookStateService.changeState(book, (String) request.getAttribute("user"), State.FINISHED);
 
         return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.NOT_MODIFIED
+                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
         );
     }
 }

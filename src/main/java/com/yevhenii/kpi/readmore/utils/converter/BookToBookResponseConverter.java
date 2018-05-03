@@ -37,10 +37,11 @@ public class BookToBookResponseConverter implements Function<Book, BookResponse>
     private Double constructAverageRating(Book book) {
 
         return Objects.isNull(book.getReviews()) ?
-                0 : book.getReviews()
-                        .stream()
-                        .mapToInt(UserReview::getRating)
-                        .average()
-                        .orElse(0);
+                0 :
+                    book.getReviews()
+                            .stream()
+                            .mapToInt(UserReview::getRating)
+                            .average()
+                            .orElse(0);
     }
 }
