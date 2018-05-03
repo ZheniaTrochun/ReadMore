@@ -2,9 +2,13 @@
   <md-card>
     <md-card-content>
 
-      <h4>{{ comment.username }}</h4>
-      <h4>{{ comment.rating }}</h4>
-      <h5>{{ comment.description }}</h5>
+      <h4>
+        Author: {{ comment.author }}
+        <br/>
+        Rating: {{ comment.rating }}
+        <br/>
+        Comment: {{ comment.description }}
+      </h4>
 
     </md-card-content>
   </md-card>
@@ -68,5 +72,9 @@
 
   .md-dialog {
     width: 80%;
+  }
+
+  .md-card {
+    width: 100%;
   }
 </style>

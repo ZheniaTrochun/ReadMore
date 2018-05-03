@@ -4,27 +4,17 @@ import com.yevhenii.kpi.readmore.exception.EmailIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.exception.RegistrationException;
 import com.yevhenii.kpi.readmore.exception.UserValidationFailedException;
 import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
-import com.yevhenii.kpi.readmore.model.Book;
-import com.yevhenii.kpi.readmore.model.BookState;
-import com.yevhenii.kpi.readmore.model.State;
 import com.yevhenii.kpi.readmore.model.User;
-import com.yevhenii.kpi.readmore.repository.BookRepository;
 import com.yevhenii.kpi.readmore.repository.UserRepository;
 import com.yevhenii.kpi.readmore.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {

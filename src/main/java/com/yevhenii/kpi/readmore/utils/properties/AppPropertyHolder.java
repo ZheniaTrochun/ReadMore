@@ -44,12 +44,14 @@ public class AppPropertyHolder {
     @Data
     public static class Googlebooks {
         private String key;
+        private String defaultImage;
 
         public Googlebooks() {
         }
 
-        public Googlebooks(String key) {
+        public Googlebooks(String key, String defaultImage) {
             this.key = key;
+            this.defaultImage = defaultImage;
         }
     }
 }

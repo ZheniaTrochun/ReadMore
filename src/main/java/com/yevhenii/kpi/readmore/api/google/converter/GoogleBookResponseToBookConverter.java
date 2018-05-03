@@ -4,8 +4,9 @@ import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.ImageLinks;
 import com.yevhenii.kpi.readmore.api.google.model.VolumeInfo;
 import com.yevhenii.kpi.readmore.model.Book;
-import com.yevhenii.kpi.readmore.model.response.BookResponse;
+import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -14,8 +15,14 @@ import java.util.function.Function;
 @Component
 public class GoogleBookResponseToBookConverter implements Function<GoogleBookResponse, Book> {
 
-    //    todo move to properties
-    private final static String DEFAULT_IMAGE = "";
+    private final String defaultImage;
+
+
+    @Autowired
+    public GoogleBookResponseToBookConverter(AppPropertyHolder holder) {
+        this.defaultImage = holder.getGooglebooks().getDefaultImage();
+    }
+
 
     @Override
     public Book apply(GoogleBookResponse googleBookResponse) {
@@ -45,12 +52,11 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
         return dateArr.length == 0 ? null : Integer.parseInt(dateArr[0]);
     }
 
-    //    todo create default link
     private String constructImage(VolumeInfo volumeInfo) {
         ImageLinks imageLinks = volumeInfo.getImageLinks();
 
         if (Objects.isNull(imageLinks)) {
-            return DEFAULT_IMAGE;
+            return defaultImage;
         }
 
         if (Strings.isNotBlank(imageLinks.getLarge())) {
@@ -61,7 +67,7 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
             return imageLinks.getThumbnail();
         }
 
-        return DEFAULT_IMAGE;
+        return defaultImage;
     }
 
 }

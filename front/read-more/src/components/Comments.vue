@@ -1,39 +1,37 @@
 <template>
-  <md-card>
-      <md-card-content>
+  <div class="comments-holder">
 
-        <comment v-for="comment in comments" :comment="comment" />
+      <h2>{{ book.name }}</h2>
 
-        <md-field>
-          <md-select v-model="rating" name="rating" id="rating" placeholder="0">
-            <md-option value="1">1</md-option>
-            <md-option value="2">2</md-option>
-            <md-option value="3">3</md-option>
-            <md-option value="4">4</md-option>
-            <md-option value="5">5</md-option>
-            <md-option value="6">6</md-option>
-            <md-option value="7">7</md-option>
-            <md-option value="8">8</md-option>
-            <md-option value="9">9</md-option>
-            <md-option value="10">10</md-option>
-          </md-select>
-        </md-field>
+      <comment v-for="comment in comments" :comment="comment" />
 
-
-        <md-field>
-          <label>Review</label>
-          <md-textarea rows="10" v-model="description"></md-textarea>
-          <md-icon>description</md-icon>
-        </md-field>
+      <md-field>
+        <md-select v-model="rating" name="rating" id="rating" placeholder="0">
+          <md-option value="1">1</md-option>
+          <md-option value="2">2</md-option>
+          <md-option value="3">3</md-option>
+          <md-option value="4">4</md-option>
+          <md-option value="5">5</md-option>
+          <md-option value="6">6</md-option>
+          <md-option value="7">7</md-option>
+          <md-option value="8">8</md-option>
+          <md-option value="9">9</md-option>
+          <md-option value="10">10</md-option>
+        </md-select>
+      </md-field>
 
 
-      </md-card-content>
+      <md-field>
+        <label>Review</label>
+        <md-textarea rows="10" v-model="description"></md-textarea>
+        <md-icon>description</md-icon>
+      </md-field>
 
       <md-card-actions>
         <md-button class="md-primary" v-if="book.id" @click="add">Add Comment</md-button>
       </md-card-actions>
 
-  </md-card>
+  </div>
 </template>
 
 <script>
@@ -104,14 +102,10 @@
 </script>
 
 <style scoped>
-  .md-card {
-    width: 75%;
-    margin: 4px;
-    display: inline-block;
-    vertical-align: top;
+  .comments-holder {
+    padding: 50px;
+    overflow: auto;
   }
-
-
 
   .container {
     position: relative !important;
@@ -139,9 +133,5 @@
   .text-holder {
     width: 60%;
     min-width: 300px;
-  }
-
-  .md-dialog {
-    width: 80%;
   }
 </style>
