@@ -4,7 +4,6 @@ import com.yevhenii.kpi.readmore.security.UserDetailsServiceImpl;
 import com.yevhenii.kpi.readmore.security.filter.JwtAuthenticationFilter;
 import com.yevhenii.kpi.readmore.security.filter.JwtLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,6 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/swagger-ui.html",
+                        "/swagger-ui.html/**",
+                        "/api/**",
+                        "/swagger-resources/**",
+                        "//swagger-resources/**",
+                        "/v2/**",
+                        "/webjars/**",
+                        "/null/").permitAll()
                 .antMatchers("/book/test").permitAll()
                 .antMatchers("/actuator", "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()

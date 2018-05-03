@@ -77,6 +77,7 @@
       onAdded(book) {
         this.books.push(book)
         this.showSearchDialog = false;
+        this.$forceUpdate()
       },
 
       onRemoved(book) {

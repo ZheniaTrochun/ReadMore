@@ -2,7 +2,6 @@ package com.yevhenii.kpi.readmore.model;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 

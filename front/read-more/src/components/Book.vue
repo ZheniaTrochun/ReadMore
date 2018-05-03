@@ -4,6 +4,7 @@
       <md-card-header>
         <div class="md-title">{{ book.name }}</div>
         <div class="md-subhead">{{ book.author }}</div>
+        <div class="md-subhead" v-if="book.id">{{ book.averageRating }}</div>
       </md-card-header>
 
       <md-card-content>
@@ -17,6 +18,7 @@
       </md-card-content>
 
       <md-card-actions>
+        <md-button class="md-primary" v-if="book.id" @click="showComments = true">Comments({{book.reviewsLength}})</md-button>
         <md-button class="md-primary" v-if="book.id" @click="showExtended = true">Show extended</md-button>
         <md-button class="md-primary" v-if="enableProcess" @click="toStarted(book)">{{ processText }}</md-button>
         <md-button class="md-accent" v-if="enableDelete" @click="removeFromTodo(book)">Delete</md-button>
@@ -27,6 +29,10 @@
     <md-dialog :md-active.sync="showExtended">
       <book-ext :book="book"/>
     </md-dialog>
+
+    <md-dialog :md-active.sync="showComments">
+      <comment-list :book="book"/>
+    </md-dialog>
   </md-card>
 </template>
 
@@ -36,9 +42,12 @@
 
   import { getToken } from '../auth/auth'
   import BookExt from "./BookExtended.vue";
+  import CommentList from "./Comments.vue";
 
   export default {
-    components: {BookExt},
+    components: {
+      CommentList,
+      BookExt},
     name: 'book',
 
     props: {
@@ -98,7 +107,8 @@
 
     data () {
       return {
-        showExtended: false
+        showExtended: false,
+        showComments: false
       }
     }
   }

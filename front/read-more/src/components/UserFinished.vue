@@ -26,15 +26,7 @@
               @removed="onRemoved"/>
       </div>
 
-      <!--<md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">-->
-        <!--<md-icon>add</md-icon>-->
-      <!--</md-button>-->
     </div>
-
-    <!--<md-dialog :md-active.sync="showSearchDialog">-->
-      <!--<book-search @added="onAdded" @clicked="onCloseSearchModal"/>-->
-    <!--</md-dialog>-->
-
 
   </div>
 </template>

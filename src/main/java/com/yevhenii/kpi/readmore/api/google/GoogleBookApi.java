@@ -1,14 +1,14 @@
 package com.yevhenii.kpi.readmore.api.google;
 
-import com.yevhenii.kpi.readmore.model.response.BookResponse;
+import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookConverter;
+import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
-import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookResponseConverter;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBooksHolder;
+import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -27,22 +27,23 @@ public class GoogleBookApi implements RemoteBookApi {
 
     private final String googleBookApiUrl;
 
-    private GoogleBookResponseToBookResponseConverter converter;
+    private GoogleBookResponseToBookConverter converter;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleBookApi.class);
 
     @Autowired
     public GoogleBookApi(RestTemplate restTemplate,
-                         @Value("${google.books.api.key}") String apiKey,
-                         GoogleBookResponseToBookResponseConverter converter) {
+                         AppPropertyHolder propertyHolder,
+                         GoogleBookResponseToBookConverter converter) {
 
         this.restTemplate = restTemplate;
-        this.googleBookApiUrl = "https://www.googleapis.com/books/v1/volumes%s&key=" + apiKey;
+        this.googleBookApiUrl = "https://www.googleapis.com/books/v1/volumes%s&key=" +
+                propertyHolder.getGooglebooks().getKey();
         this.converter = converter;
     }
 
     @Override
-    public List<BookResponse> getBooksByNameAndAuthor(String name, String author) {
+    public List<Book> getBooksByNameAndAuthor(String name, String author) {
 
         ResponseEntity<GoogleBooksHolder> booksHolder =
                 restTemplate.getForEntity(constructApiUrl(name, author), GoogleBooksHolder.class);
@@ -60,7 +61,7 @@ public class GoogleBookApi implements RemoteBookApi {
     }
 
     @Override
-    public Optional<BookResponse> getBookById(String id) {
+    public Optional<Book> getBookById(String id) {
         ResponseEntity<GoogleBookResponse> book =
                 restTemplate.getForEntity(constructApiUrl(id), GoogleBookResponse.class);
 
@@ -74,7 +75,7 @@ public class GoogleBookApi implements RemoteBookApi {
     }
 
     @Override
-    public Optional<BookResponse> getOneBookByNameAndAuthor(String name, String author) {
+    public Optional<Book> getOneBookByNameAndAuthor(String name, String author) {
 
         return getBooksByNameAndAuthor(name, author)
                 .stream()

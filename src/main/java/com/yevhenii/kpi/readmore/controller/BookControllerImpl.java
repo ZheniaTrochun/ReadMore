@@ -1,20 +1,26 @@
 package com.yevhenii.kpi.readmore.controller;
 
 
-import com.yevhenii.kpi.readmore.model.Book;
+import com.yevhenii.kpi.readmore.model.UserReview;
+import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
+import com.yevhenii.kpi.readmore.utils.ControllerUtils;
+import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
+import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -26,23 +32,35 @@ public class BookControllerImpl implements BookController {
 
     private final BookService bookService;
 
+    private final BookToBookResponseConverter converter;
+
     @Autowired
-    public BookControllerImpl(BookService bookService) {
+    public BookControllerImpl(BookService bookService, BookToBookResponseConverter converter) {
         this.bookService = bookService;
+        this.converter = converter;
     }
 
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets books from DB and from remote api by name and author",
+            response = List.class,
+            produces = "application/json"
+    )
     @RequestMapping(method = GET, produces = "application/json")
-    public Callable<ResponseEntity<List<Book>>> findBooksByNameAndAuthor(@RequestParam String name,
-                                                                        @RequestParam String author) {
+    public Callable<ResponseEntity<List<BookResponse>>> findBooksByNameAndAuthor(@RequestParam String name,
+                                                                                 @RequestParam String author) {
 
-        LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
+        LOGGER.debug(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
-            List<Book> books = bookService.findManyBooksByNameAndAuthor(name, author);
+            List<BookResponse> books = bookService.findManyBooksByNameAndAuthor(name, author)
+                    .stream()
+                    .map(converter)
+                    .collect(Collectors.toList());
 
-            LOGGER.info(String.format("found books, length = %d", books.size()));
+            LOGGER.debug(String.format("found books, length = %d", books.size()));
 
             return ResponseEntity.ok(books);
         };
@@ -50,16 +68,23 @@ public class BookControllerImpl implements BookController {
 
 
     @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Gets one book by name and author",
+            response = BookResponse.class,
+            produces = "application/json"
+    )
     @RequestMapping(path = "/one", method = GET, produces = "application/json")
-    public Callable<ResponseEntity<Book>> findOneBookByNameAndAuthor(@RequestParam String name,
-                                                                  @RequestParam String author) {
+    public Callable<ResponseEntity<BookResponse>> findOneBookByNameAndAuthor(@RequestParam String name,
+                                                                             @RequestParam String author) {
 
-        LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
+        LOGGER.debug(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
-            Optional<Book> book = bookService.findOneBookByNameAndAuthor(name, author);
+            Optional<BookResponse> book = bookService.findOneBookByNameAndAuthor(name, author)
+                    .map(converter);
 
-            LOGGER.info(String.format("found book option = %s", book.toString()));
+            LOGGER.debug(String.format("found book option = %s", book.toString()));
 
             return book
                     .map(ResponseEntity::ok)
@@ -67,8 +92,36 @@ public class BookControllerImpl implements BookController {
         };
     }
 
-    @RequestMapping(value = "/test", method = GET)
-    public String test() {
-        return "Hello";
+    @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Endpoint for receiving reviews for book",
+            response = List.class,
+            produces = "application/json"
+    )
+    @RequestMapping(value = "/review", method = RequestMethod.GET)
+    public ResponseEntity<List<UserReview>> getReviews(@RequestParam @NotNull Long bookId, ServletRequest request) {
+
+        return ResponseEntity.ok(bookService.getReviews(bookId));
+    }
+
+    @Override
+    @ApiOperation(
+            httpMethod = "POST",
+            value = "Endpoint for new review creation"
+    )
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ResponseEntity<Void> addReviews(@RequestBody @NotNull UserReviewDto reviewDto, ServletRequest request) {
+
+        UserReview review = new UserReview(
+                reviewDto.getRating(),
+                reviewDto.getDescription(),
+                (String) request.getAttribute("user"));
+
+        Boolean success = bookService.addReview(review, reviewDto.getBookId());
+
+        LOGGER.debug("Review addition done, success = " + success);
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 }

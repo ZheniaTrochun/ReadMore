@@ -1,7 +1,6 @@
 package com.yevhenii.kpi.readmore.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +9,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = { "name", "author" })
@@ -70,8 +71,8 @@ public class Book {
         if (!(o instanceof Book)) return false;
         if (!super.equals(o)) return false;
         Book book = (Book) o;
-        return Objects.equals(getName(), book.getName()) &&
-                Objects.equals(getAuthor(), book.getAuthor());
+        return getName().equals(book.getName()) &&
+                getAuthor().equals(book.getAuthor());
     }
 
     @Override

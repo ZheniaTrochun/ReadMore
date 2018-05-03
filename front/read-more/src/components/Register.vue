@@ -60,7 +60,7 @@
             this.$emit('clicked',
               {
                 res: false,
-                msg: err.message
+                msg: err.response.data.message
               }
             )
           });

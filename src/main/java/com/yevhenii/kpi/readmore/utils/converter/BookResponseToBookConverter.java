@@ -1,4 +1,4 @@
-package com.yevhenii.kpi.readmore.converter;
+package com.yevhenii.kpi.readmore.utils.converter;
 
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.Book;
@@ -14,11 +14,12 @@ public class BookResponseToBookConverter implements Function<BookResponse, Book>
 
         return Book
                 .builder()
+                .id(resp.getId())
                 .name(resp.getName())
                 .author(resp.getAuthor())
                 .genre(resp.getGenre())
                 .year(resp.getYear())
-                .imageUrl(resp.getImageLink())
+                .imageUrl(resp.getImageUrl())
                 .description(resp.getDescription())
                 .build();
     }
