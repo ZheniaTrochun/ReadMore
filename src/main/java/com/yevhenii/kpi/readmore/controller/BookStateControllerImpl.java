@@ -1,5 +1,6 @@
 package com.yevhenii.kpi.readmore.controller;
 
+import com.yevhenii.kpi.readmore.utils.ControllerUtils;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.State;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +45,7 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Removes book state for user (removes mapping between user and book)"
     )
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteUserTodo(@RequestParam Long bookId, ServletRequest request) {
+    public ResponseEntity<Void> deleteUserTodo(@RequestParam @NotNull Long bookId, ServletRequest request) {
 
         String username = (String) request.getAttribute("user");
 
@@ -54,9 +57,7 @@ public class BookStateControllerImpl implements BookStateController {
                 bookId,
                 success ? "OK" : "FAILED"));
 
-        return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
-        );
+        return ControllerUtils.okOrBadRequest(success);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class BookStateControllerImpl implements BookStateController {
             produces = "application/json"
     )
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
-    public ResponseEntity<NotesResponse> getUserNotes(@RequestParam Long bookId, ServletRequest request) {
+    public ResponseEntity<NotesResponse> getUserNotes(@RequestParam @NotNull Long bookId, ServletRequest request) {
 
         String username = (String) request.getAttribute("user");
 
@@ -82,15 +83,18 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Updates user's notes for book"
     )
     @RequestMapping(value = "/notes", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateUserNotes(@RequestBody UserNotesDto notes, ServletRequest request) {
+    public ResponseEntity<Void> updateUserNotes(@RequestBody @Valid UserNotesDto notes, ServletRequest request) {
 
         String username = (String) request.getAttribute("user");
 
         Boolean success = bookStateService.updateUserNotes(notes.getNotes(), notes.getBookId(), username);
 
-        return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
-        );
+        LOGGER.debug(String.format("Editing notes for user[%s], bookId[%d], result[%s]",
+                username,
+                notes.getBookId(),
+                success ? "OK" : "FAILED"));
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 
     @Override
@@ -117,14 +121,19 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Adds new book to todo-list"
     )
     @RequestMapping(value = "/todo", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUserTodo(@RequestBody Book book, ServletRequest request) {
+    public ResponseEntity<Void> addUserTodo(@RequestBody @Valid Book book, ServletRequest request) {
+
+        String username = (String) request.getAttribute("user");
 
         boolean success =
-                bookStateService.addTodoItem(book, (String) request.getAttribute("user"));
+                bookStateService.addTodoItem(book, username);
 
-        return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
-        );
+        LOGGER.debug(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
+                username,
+                book.getId(),
+                success ? "OK" : "FAILED"));
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 
     @Override
@@ -151,14 +160,19 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Adds new book to progress-list"
     )
     @RequestMapping(value = "/progress", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUserProgress(@RequestBody Book book, ServletRequest request) {
+    public ResponseEntity<Void> addUserProgress(@RequestBody @Valid Book book, ServletRequest request) {
+
+        String username = (String) request.getAttribute("user");
 
         boolean success =
-                bookStateService.changeState(book, (String) request.getAttribute("user"), State.IN_PROGRESS);
+                bookStateService.changeState(book, username, State.IN_PROGRESS);
 
-        return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
-        );
+        LOGGER.debug(String.format("In-Progress item addition for user[%s], bookId[%d], result[%s]",
+                username,
+                book.getId(),
+                success ? "OK" : "FAILED"));
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 
     @Override
@@ -185,13 +199,18 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Adds new book to finished-list"
     )
     @RequestMapping(value = "/finished", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUserFinished(@RequestBody Book book, ServletRequest request) {
+    public ResponseEntity<Void> addUserFinished(@RequestBody @Valid Book book, ServletRequest request) {
+
+        String username = (String) request.getAttribute("user");
 
         boolean success =
-                bookStateService.changeState(book, (String) request.getAttribute("user"), State.FINISHED);
+                bookStateService.changeState(book, username, State.FINISHED);
 
-        return new ResponseEntity<>(
-                success ? HttpStatus.OK : HttpStatus.BAD_REQUEST
-        );
+        LOGGER.debug(String.format("Finished item addition for user[%s], bookId[%d], result[%s]",
+                username,
+                book.getId(),
+                success ? "OK" : "FAILED"));
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 }

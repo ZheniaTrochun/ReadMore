@@ -1,8 +1,6 @@
 package com.yevhenii.kpi.readmore.controller;
 
-import com.yevhenii.kpi.readmore.exception.EmailIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.exception.RegistrationException;
-import com.yevhenii.kpi.readmore.exception.UsernameIsAlreadyTakenException;
 import com.yevhenii.kpi.readmore.model.User;
 import com.yevhenii.kpi.readmore.model.dto.UserRegisterDto;
 import com.yevhenii.kpi.readmore.service.UserService;
@@ -16,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -38,7 +38,7 @@ public class UserControllerImpl implements UserController {
             value = "Endpoint for users registration"
     )
     @RequestMapping(value = "/register", method = POST)
-    public ResponseEntity<Void> register(@RequestBody UserRegisterDto registerDto, BindingResult result)
+    public ResponseEntity<Void> register(@RequestBody @Valid UserRegisterDto registerDto, BindingResult result)
             throws RegistrationException {
 
         User user = userService.register(registerDto.getUsername(),

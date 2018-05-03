@@ -3,6 +3,7 @@ package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.model.UserReview;
 import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
+import com.yevhenii.kpi.readmore.utils.ControllerUtils;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -76,13 +78,13 @@ public class BookControllerImpl implements BookController {
     public Callable<ResponseEntity<BookResponse>> findOneBookByNameAndAuthor(@RequestParam String name,
                                                                              @RequestParam String author) {
 
-        LOGGER.info(String.format("find book called with name = %s and author = %s", name, author));
+        LOGGER.debug(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
             Optional<BookResponse> book = bookService.findOneBookByNameAndAuthor(name, author)
                     .map(converter);
 
-            LOGGER.info(String.format("found book option = %s", book.toString()));
+            LOGGER.debug(String.format("found book option = %s", book.toString()));
 
             return book
                     .map(ResponseEntity::ok)
@@ -98,7 +100,7 @@ public class BookControllerImpl implements BookController {
             produces = "application/json"
     )
     @RequestMapping(value = "/review", method = RequestMethod.GET)
-    public ResponseEntity<List<UserReview>> getReviews(@RequestParam Long bookId, ServletRequest request) {
+    public ResponseEntity<List<UserReview>> getReviews(@RequestParam @NotNull Long bookId, ServletRequest request) {
 
         return ResponseEntity.ok(bookService.getReviews(bookId));
     }
@@ -109,13 +111,17 @@ public class BookControllerImpl implements BookController {
             value = "Endpoint for new review creation"
     )
     @RequestMapping(value = "/review", method = RequestMethod.POST)
-    public ResponseEntity<Void> addReviews(@RequestBody UserReviewDto review, ServletRequest request) {
+    public ResponseEntity<Void> addReviews(@RequestBody @NotNull UserReviewDto reviewDto, ServletRequest request) {
 
-        UserReview review1 =
-                new UserReview(review.getRating(), review.getDescription(), (String) request.getAttribute("user"));
+        UserReview review = new UserReview(
+                reviewDto.getRating(),
+                reviewDto.getDescription(),
+                (String) request.getAttribute("user"));
 
-        bookService.addReview(review1, review.getBookId());
+        Boolean success = bookService.addReview(review, reviewDto.getBookId());
 
-        return new ResponseEntity<>(HttpStatus.OK );
+        LOGGER.debug("Review addition done, success = " + success);
+
+        return ControllerUtils.okOrBadRequest(success);
     }
 }

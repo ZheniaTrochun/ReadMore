@@ -61,7 +61,6 @@ public class BookServiceImpl implements BookService {
         return merge(booksFromDb, booksFromApi);
     }
 
-//    todo think about validations
     @Override
     public Book save(Book book) {
 
@@ -118,7 +117,6 @@ public class BookServiceImpl implements BookService {
      * @param bookId - book id
      * @return list of reviews or empty list if something gone wrong
      */
-//    todo validation
     @Override
     public List<UserReview> getReviews(Long bookId) {
 
