@@ -63,8 +63,8 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/", "/connect**", "/webjars/**")
 				.permitAll()
-				.anyRequest()
-				.authenticated()
+				.anyRequest().permitAll()
+//				.authenticated()
 				.and()
 				.logout()
 				.logoutSuccessUrl("/").permitAll().and().csrf()
@@ -85,7 +85,16 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 		tokenServices.setRestTemplate(facebookTemplate);
 		facebookFilter.setTokenServices(tokenServices);
 
+		OAuth2ClientAuthenticationProcessingFilter twitterFilter = new OAuth2ClientAuthenticationProcessingFilter(
+				"/connect/twitter");
+		OAuth2RestTemplate twitterTemplate = new OAuth2RestTemplate(twitter(), clientContext);
+		twitterFilter.setRestTemplate(twitterTemplate);
+		tokenServices = new UserInfoTokenServices(twitterResource().getUserInfoUri(), twitter().getClientId());
+		tokenServices.setRestTemplate(twitterTemplate);
+		twitterFilter.setTokenServices(tokenServices);
+
 		filters.add(facebookFilter);
+		filters.add(twitterFilter);
 
 		filter.setFilters(filters);
 
@@ -109,6 +118,19 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 	@Bean
 	@ConfigurationProperties("facebook.resource")
 	public ResourceServerProperties facebookResource() {
+		return new ResourceServerProperties();
+	}
+
+
+	@Bean
+	@ConfigurationProperties("twitter.client")
+	public AuthorizationCodeResourceDetails twitter() {
+		return new AuthorizationCodeResourceDetails();
+	}
+
+	@Bean
+	@ConfigurationProperties("twitter.resource")
+	public ResourceServerProperties twitterResource() {
 		return new ResourceServerProperties();
 	}
 }
