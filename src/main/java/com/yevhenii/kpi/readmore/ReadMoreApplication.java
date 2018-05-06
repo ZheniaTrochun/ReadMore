@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoT
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -85,16 +84,16 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 		tokenServices.setRestTemplate(facebookTemplate);
 		facebookFilter.setTokenServices(tokenServices);
 
-//		OAuth2ClientAuthenticationProcessingFilter twitterFilter = new OAuth2ClientAuthenticationProcessingFilter(
-//				"/connect/twitter");
-//		OAuth2RestTemplate twitterTemplate = new OAuth2RestTemplate(twitter(), clientContext);
-//		twitterFilter.setRestTemplate(twitterTemplate);
-//		tokenServices = new UserInfoTokenServices(twitterResource().getUserInfoUri(), twitter().getClientId());
-//		tokenServices.setRestTemplate(twitterTemplate);
-//		twitterFilter.setTokenServices(tokenServices);
+		OAuth2ClientAuthenticationProcessingFilter twitterFilter = new OAuth2ClientAuthenticationProcessingFilter(
+				"/connect/twitter");
+		OAuth2RestTemplate twitterTemplate = new OAuth2RestTemplate(twitter(), clientContext);
+		twitterFilter.setRestTemplate(twitterTemplate);
+		tokenServices = new UserInfoTokenServices(twitterResource().getUserInfoUri(), twitter().getClientId());
+		tokenServices.setRestTemplate(twitterTemplate);
+		twitterFilter.setTokenServices(tokenServices);
 
 		filters.add(facebookFilter);
-//		filters.add(twitterFilter);
+		filters.add(twitterFilter);
 
 		filter.setFilters(filters);
 
@@ -121,16 +120,16 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 		return new ResourceServerProperties();
 	}
 
-//
-//	@Bean
-//	@ConfigurationProperties("twitter.client")
-//	public AuthorizationCodeResourceDetails twitter() {
-//		return new AuthorizationCodeResourceDetails();
-//	}
-//
-//	@Bean
-//	@ConfigurationProperties("twitter.resource")
-//	public ResourceServerProperties twitterResource() {
-//		return new ResourceServerProperties();
-//	}
+
+	@Bean
+	@ConfigurationProperties("twitter.client")
+	public AuthorizationCodeResourceDetails twitter() {
+		return new AuthorizationCodeResourceDetails();
+	}
+
+	@Bean
+	@ConfigurationProperties("twitter.resource")
+	public ResourceServerProperties twitterResource() {
+		return new ResourceServerProperties();
+	}
 }
