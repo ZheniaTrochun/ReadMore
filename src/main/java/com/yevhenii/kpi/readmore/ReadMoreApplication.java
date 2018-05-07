@@ -177,8 +177,12 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 	@RequestMapping("/publish-test")
 	public String publishOnFacebook(Principal principal) {
 		String tokenValue = (String)((OAuth2Authentication) principal).getCredentials();
-		log.info(tokenValue);
-		FacebookTemplate fbTemplate = new FacebookTemplate(tokenValue);
+		String contextToken = clientContext.getAccessToken().getValue();
+
+		log.info("token from context: " + contextToken);
+		log.info("token from principal: " + tokenValue);
+
+		FacebookTemplate fbTemplate = new FacebookTemplate(contextToken);
 //		fbTemplate.setRequestFactory(restTemplate);
 		return fbTemplate.feedOperations().updateStatus("test from app");
 	}
