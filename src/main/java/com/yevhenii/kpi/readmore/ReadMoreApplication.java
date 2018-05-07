@@ -1,5 +1,6 @@
 package com.yevhenii.kpi.readmore;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +29,7 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.CompositeFilter;
 
@@ -46,6 +48,7 @@ import java.util.Map;
 @SpringBootApplication
 @EnableOAuth2Client
 @RestController
+@Slf4j
 public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 
 //	@Autowired
@@ -60,6 +63,9 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 //
 	@Autowired
 	OAuth2ClientContext clientContext;
+
+	@Autowired
+	RestTemplate restTemplate;
 
 //	@Autowired
 //	Twitter twitter;
@@ -170,7 +176,12 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 
 	@RequestMapping("/publish-test")
 	public String publishOnFacebook(Principal principal) {
-		return new FacebookTemplate(((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).get("tokenValue")).feedOperations().updateStatus("test from app");
+		String tokenValue = ((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).get("tokenValue");
+		log.info(tokenValue);
+		((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).entrySet().forEach(e -> log.info(e.getKey() + " - " + e.getValue()));
+		FacebookTemplate fbTemplate = new FacebookTemplate(tokenValue);
+//		fbTemplate.setRequestFactory(restTemplate);
+		return fbTemplate.feedOperations().updateStatus("test from app");
 	}
 
 //	public String postOnFacebook(String userId, String pageId, String message) {
