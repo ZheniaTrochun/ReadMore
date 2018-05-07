@@ -176,13 +176,14 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 
 	@RequestMapping("/publish-test")
 	public String publishOnFacebook(Principal principal) {
-		String tokenValue = ((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).get("tokenValue");
+		String tokenValue = (String)((OAuth2Authentication) principal).getCredentials();
 		log.info(tokenValue);
-		((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).entrySet().forEach(e -> log.info(e.getKey() + " - " + e.getValue()));
 		FacebookTemplate fbTemplate = new FacebookTemplate(tokenValue);
 //		fbTemplate.setRequestFactory(restTemplate);
 		return fbTemplate.feedOperations().updateStatus("test from app");
 	}
+
+//	EAAeT1TPQypsBAITgVhUCTWZBZCrsqvmpn6ZBGYzeHZCmlz5t6I5OVm9ifKYSTBHIrXohpyPYD2cmPCXuyx3eDKAw1626o6VtbpLIEFxE7uou3y4PaqEyISvGc2azWL7wW7ZAcTpXfbSTHtejvbZAJc3jWukqlct5KtJwxtoqA62QZDZD
 
 //	public String postOnFacebook(String userId, String pageId, String message) {
 //		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userId);
