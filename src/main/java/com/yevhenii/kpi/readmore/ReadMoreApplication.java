@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.social.config.annotation.SocialConfigurer;
@@ -24,6 +25,7 @@ import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextListener;
@@ -34,6 +36,7 @@ import javax.sql.DataSource;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 //import org.springframework.social.twitter.api.Twitter;
 //import org.springframework.social.twitter.api.TwitterProfile;
@@ -45,24 +48,24 @@ import java.util.List;
 @RestController
 public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	ConnectionFactoryLocator connectionFactoryLocator;
-
-	@Autowired
-	UsersConnectionRepository usersConnectionRepository;
-
-
-	@Autowired
-	SocialConfigurer socialConfigurer;
-
+//	@Autowired
+//	ConnectionFactoryLocator connectionFactoryLocator;
+//
+//	@Autowired
+//	UsersConnectionRepository usersConnectionRepository;
+//
+//
+//	@Autowired
+//	SocialConfigurer socialConfigurer;
+//
 	@Autowired
 	OAuth2ClientContext clientContext;
 
 //	@Autowired
 //	Twitter twitter;
 
-	@Autowired
-	ConnectionRepository repository;
+//	@Autowired
+//	ConnectionRepository repository;
 
 
 	@RequestMapping("/")
@@ -159,24 +162,24 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 	}
 
 
-	@Bean
-	public SocialConfigurer socialConfigurerAdapter(DataSource dataSource) {
-		// https://github.com/spring-projects/spring-social/blob/master/spring-social-config/src/main/java/org/springframework/social/config/annotation/SocialConfiguration.java#L87
-		return new DatabaseConfigurer(dataSource);
-	}
+//	@Bean
+//	public SocialConfigurer socialConfigurerAdapter(DataSource dataSource) {
+//		// https://github.com/spring-projects/spring-social/blob/master/spring-social-config/src/main/java/org/springframework/social/config/annotation/SocialConfiguration.java#L87
+//		return new DatabaseConfigurer(dataSource);
+//	}
 
 	@RequestMapping("/publish-test")
 	public String publishOnFacebook(Principal principal) {
-		return postOnFacebook(principal.getName(), "me", "test from app");
+		return new FacebookTemplate(((Map<String, String>) ((OAuth2Authentication) principal).getUserAuthentication().getDetails()).get("tokenValue")).feedOperations().updateStatus("test from app");
 	}
 
-	public String postOnFacebook(String userId, String pageId, String message) {
-		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userId);
-		Connection<Facebook> facebookConnection = connectionRepository.getPrimaryConnection(Facebook.class);
-		Facebook facebook = facebookConnection.getApi();
-
-		return facebook.feedOperations().post(pageId, message);
-	}
+//	public String postOnFacebook(String userId, String pageId, String message) {
+//		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userId);
+//		Connection<Facebook> facebookConnection = connectionRepository.getPrimaryConnection(Facebook.class);
+//		Facebook facebook = facebookConnection.getApi();
+//
+//		return facebook.feedOperations().post(pageId, message);
+//	}
 
 //	@Bean
 //	@Scope(value="request", proxyMode= ScopedProxyMode.INTERFACES)
