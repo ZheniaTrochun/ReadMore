@@ -1,11 +1,12 @@
 package com.yevhenii.kpi.readmore.api.google.converter;
 
+import com.google.common.base.Strings;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.ImageLinks;
 import com.yevhenii.kpi.readmore.api.google.model.VolumeInfo;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
-import org.apache.logging.log4j.util.Strings;
+//import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,11 +60,11 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
             return defaultImage;
         }
 
-        if (Strings.isNotBlank(imageLinks.getLarge())) {
+        if (!Strings.isNullOrEmpty(imageLinks.getLarge())) {
             return imageLinks.getLarge();
         }
 
-        if (Strings.isNotBlank(imageLinks.getThumbnail())) {
+        if (!Strings.isNullOrEmpty(imageLinks.getThumbnail())) {
             return imageLinks.getThumbnail();
         }
 

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableAutoConfiguration
-@EnableWebMvc
+//@EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override

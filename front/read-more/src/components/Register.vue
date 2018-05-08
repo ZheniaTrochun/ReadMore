@@ -42,7 +42,7 @@
 
       register() {
         axios.post(
-          'http://localhost:8080/user/register',
+          'http://localhost:8090/user/register',
           {
             username: this.username,
             password: this.password,

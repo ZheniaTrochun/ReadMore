@@ -10,7 +10,6 @@
 //@Configuration
 //@Slf4j
 //public class SocialConfiguration {
-////    private static final Logger LOGGER
 //
 //    @Bean
 //    public SignInAdapter signInAdapter() {
