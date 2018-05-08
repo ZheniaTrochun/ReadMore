@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -18,20 +19,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 //import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.social.config.annotation.SocialConfigurer;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.*;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.CompositeFilter;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.Filter;
 import javax.sql.DataSource;
@@ -67,6 +70,9 @@ public class ReadMoreApplication {
 	@Autowired
 	RestTemplate restTemplate;
 
+	@Autowired
+	ConnectionRepository connectionRepository;
+
 //	@Autowired
 //	Twitter twitter;
 
@@ -97,9 +103,15 @@ public class ReadMoreApplication {
 		SpringApplication.run(ReadMoreApplication.class, args);
 	}
 
-	@Bean
-	public RequestContextListener requestContextListener() {
-		return new RequestContextListener();
+//	@Bean
+//	public RequestContextListener requestContextListener() {
+//		return new RequestContextListener();
+//	}
+
+	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
+	public ModelAndView connect(WebRequest request) {
+		log.info("test from connect/twitterConnected");
+		return new ModelAndView("redirect:/twitter/create-auth");
 	}
 
 //	@Override

@@ -22,8 +22,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable();
     }
 
-//    @Bean
-//    public AuthenticationManager customAuthenticationManager() throws Exception {
-//        return authenticationManager();
-//    }
+    @Bean
+    public AuthenticationManager customAuthenticationManager() throws Exception {
+        return authenticationManager();
+    }
 }

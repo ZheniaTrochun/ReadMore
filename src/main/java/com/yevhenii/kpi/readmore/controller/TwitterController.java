@@ -1,7 +1,10 @@
 package com.yevhenii.kpi.readmore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,5 +44,18 @@ public class TwitterController {
 
         twitter.timelineOperations().updateStatus("Read more!");
         return "check it!";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/create-auth")
+    public String signin() {
+        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+            return "redirect:/connect/twitter";
+        }
+        UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
+		String username = profile.getUsername();
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(username, null, null);
+		SecurityContextHolder.getContext().setAuthentication(token);
+		return "test";
     }
 }
