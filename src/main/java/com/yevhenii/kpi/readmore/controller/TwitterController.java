@@ -7,6 +7,7 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.TwitterProfile;
+import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,18 +30,19 @@ public class TwitterController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/friends")
     public String friends() {
-        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
-            return "redirect:/connect/twitter";
-        }
+//        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+//            return "redirect:/connect/twitter";
+//        }
 
         return String.join(",", twitter.friendOperations().getFriends().stream().map(TwitterProfile::getName).collect(Collectors.toList()));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/tweet")
     public String tweet() {
-        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
-            return "redirect:/connect/twitter";
-        }
+//        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+//            return "redirect:/connect/twitter";
+//        }
+//        Twitter twitter = new TwitterTemplate(SecurityContextHolder.getContext().getAuthentication().getCredentials());
 
         twitter.timelineOperations().updateStatus("Read more!");
         return "check it!";

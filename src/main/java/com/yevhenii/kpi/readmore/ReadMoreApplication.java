@@ -29,6 +29,7 @@ import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextListener;
@@ -37,6 +38,9 @@ import org.springframework.web.filter.CompositeFilter;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -108,19 +112,48 @@ public class ReadMoreApplication {
 //		return new RequestContextListener();
 //	}
 
-	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
-	public ModelAndView connect(WebRequest request) {
+	@RequestMapping(value = "/connect/twitter", method = RequestMethod.GET)
+	public ModelAndView callback(/*@RequestParam String oauth_token, @RequestParam String oauth_verifier,*/ ServletRequest request, ServletResponse response) {
 		log.info("test from connect/twitterConnected");
-		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
-			return new ModelAndView("redirect:/connect/twitter");
-		}
+//		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+//			return new ModelAndView("redirect:/connect/twitter");
+//		}
+
+		Map map = request.getParameterMap();
+
+		HttpServletRequest req = (HttpServletRequest) request;
+
+		String query = req.getQueryString();
+// error here
 		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
 		String username = profile.getUsername();
 		UsernamePasswordAuthenticationToken token =
 				new UsernamePasswordAuthenticationToken(username, null, null);
 		SecurityContextHolder.getContext().setAuthentication(token);
 
-		return new ModelAndView("redirect:/index.html");
+		return new ModelAndView("redirect:/");
+	}
+
+	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
+	public ModelAndView connect(ServletRequest request) {
+		log.info("test from connect/twitterConnected");
+		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+			return new ModelAndView("redirect:/connect/twitter");
+		}
+
+		Map map = request.getParameterMap();
+
+		HttpServletRequest req = (HttpServletRequest) request;
+
+		String query = req.getQueryString();
+
+		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
+		String username = profile.getUsername();
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(username, null, null);
+		SecurityContextHolder.getContext().setAuthentication(token);
+
+		return new ModelAndView("redirect:/");
 	}
 
 //	@Override
