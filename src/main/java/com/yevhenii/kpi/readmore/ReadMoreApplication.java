@@ -80,10 +80,10 @@ public class ReadMoreApplication {
 //	ConnectionRepository repository;
 
 
-	@RequestMapping("/")
-	public String test() {
-		return "TEST SUCCESS";
-	}
+//	@RequestMapping("/")
+//	public String test() {
+//		return "TEST SUCCESS";
+//	}
 
 //	@RequestMapping("/twitter")
 //	public String twitterConnect() {
@@ -111,7 +111,16 @@ public class ReadMoreApplication {
 	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
 	public ModelAndView connect(WebRequest request) {
 		log.info("test from connect/twitterConnected");
-		return new ModelAndView("redirect:/twitter/create-auth");
+		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+			return new ModelAndView("redirect:/connect/twitter");
+		}
+		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
+		String username = profile.getUsername();
+		UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(username, null, null);
+		SecurityContextHolder.getContext().setAuthentication(token);
+
+		return new ModelAndView("redirect:/index.html");
 	}
 
 //	@Override
