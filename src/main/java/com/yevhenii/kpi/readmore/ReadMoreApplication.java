@@ -1,39 +1,20 @@
 package com.yevhenii.kpi.readmore;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.social.config.annotation.SocialConfigurer;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.ConnectionRepository;
-import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.filter.CompositeFilter;
 
-import javax.servlet.Filter;
-import javax.sql.DataSource;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+
+//import org.springframework.security.oauth2.client.OAuth2ClientContext;
+//import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+//import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+//import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+//import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+//import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 //import org.springframework.social.twitter.api.Twitter;
 //import org.springframework.social.twitter.api.TwitterProfile;
@@ -41,28 +22,28 @@ import java.util.List;
 //import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 @SpringBootApplication
-@EnableOAuth2Client
+//@EnableOAuth2Client
 @RestController
-public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
+public class ReadMoreApplication {
 
-	@Autowired
-	ConnectionFactoryLocator connectionFactoryLocator;
+//	@Autowired
+//	ConnectionFactoryLocator connectionFactoryLocator;
 
-	@Autowired
-	UsersConnectionRepository usersConnectionRepository;
+//	@Autowired
+//	UsersConnectionRepository usersConnectionRepository;
 
 
-	@Autowired
-	SocialConfigurer socialConfigurer;
+//	@Autowired
+//	SocialConfigurer socialConfigurer;
 
-	@Autowired
-	OAuth2ClientContext clientContext;
+//	@Autowired
+//	OAuth2ClientContext clientContext;
 
 //	@Autowired
 //	Twitter twitter;
 
-	@Autowired
-	ConnectionRepository repository;
+//	@Autowired
+//	ConnectionRepository repository;
 
 
 	@RequestMapping("/")
@@ -93,90 +74,90 @@ public class ReadMoreApplication extends WebSecurityConfigurerAdapter {
 		return new RequestContextListener();
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.antMatcher("/**")
-				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
-				.authorizeRequests()
-				.antMatchers("/", "/connect**", "/webjars/**")
-				.permitAll()
-				.anyRequest().permitAll()
-//				.authenticated()
-				.and()
-				.logout()
-				.logoutSuccessUrl("/").permitAll().and().csrf()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-	}
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		http.antMatcher("/**")
+//				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
+//				.authorizeRequests()
+//				.antMatchers("/", "/connect**", "/webjars/**")
+//				.permitAll()
+//				.anyRequest().permitAll()
+////				.authenticated()
+//				.and()
+//				.logout()
+//				.logoutSuccessUrl("/").permitAll().and().csrf()
+//				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+//	}
 
-	private Filter ssoFilter() {
+//	private Filter ssoFilter() {
+//
+//		CompositeFilter filter = new CompositeFilter();
+//		List<Filter> filters = new ArrayList<>();
+//
+//		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(
+//				"/connect/facebook");
+//		OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), clientContext);
+//		facebookFilter.setRestTemplate(facebookTemplate);
+//		UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource().getUserInfoUri(),
+//				facebook().getClientId());
+//		tokenServices.setRestTemplate(facebookTemplate);
+//		facebookFilter.setTokenServices(tokenServices);
+//
+////		OAuth2ClientAuthenticationProcessingFilter twitterFilter = new OAuth2ClientAuthenticationProcessingFilter(
+////				"/connect/twitter");
+////		OAuth2RestTemplate twitterTemplate = new OAuth2RestTemplate(twitter(), clientContext);
+////		twitterFilter.setRestTemplate(twitterTemplate);
+////		tokenServices = new UserInfoTokenServices(twitterResource().getUserInfoUri(), twitter().getClientId());
+////		tokenServices.setRestTemplate(twitterTemplate);
+////		twitterFilter.setTokenServices(tokenServices);
+//
+//		filters.add(facebookFilter);
+////		filters.add(twitterFilter);
+//
+//		filter.setFilters(filters);
+//
+//		return filter;
+//	}
+//
+//	@Bean
+//	public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+//		FilterRegistrationBean registration = new FilterRegistrationBean();
+//		registration.setFilter(filter);
+//		registration.setOrder(-100);
+//		return registration;
+//	}
+//
+//	@Bean
+//	@ConfigurationProperties("facebook.client")
+//	public AuthorizationCodeResourceDetails facebook() {
+//		return new AuthorizationCodeResourceDetails();
+//	}
+//
+//	@Bean
+//	@ConfigurationProperties("facebook.resource")
+//	public ResourceServerProperties facebookResource() {
+//		return new ResourceServerProperties();
+//	}
+//
+//
+//	@Bean
+//	public SocialConfigurer socialConfigurerAdapter(DataSource dataSource) {
+//		// https://github.com/spring-projects/spring-social/blob/master/spring-social-config/src/main/java/org/springframework/social/config/annotation/SocialConfiguration.java#L87
+//		return new DatabaseConfigurer(dataSource);
+//	}
 
-		CompositeFilter filter = new CompositeFilter();
-		List<Filter> filters = new ArrayList<>();
-
-		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(
-				"/connect/facebook");
-		OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), clientContext);
-		facebookFilter.setRestTemplate(facebookTemplate);
-		UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource().getUserInfoUri(),
-				facebook().getClientId());
-		tokenServices.setRestTemplate(facebookTemplate);
-		facebookFilter.setTokenServices(tokenServices);
-
-//		OAuth2ClientAuthenticationProcessingFilter twitterFilter = new OAuth2ClientAuthenticationProcessingFilter(
-//				"/connect/twitter");
-//		OAuth2RestTemplate twitterTemplate = new OAuth2RestTemplate(twitter(), clientContext);
-//		twitterFilter.setRestTemplate(twitterTemplate);
-//		tokenServices = new UserInfoTokenServices(twitterResource().getUserInfoUri(), twitter().getClientId());
-//		tokenServices.setRestTemplate(twitterTemplate);
-//		twitterFilter.setTokenServices(tokenServices);
-
-		filters.add(facebookFilter);
-//		filters.add(twitterFilter);
-
-		filter.setFilters(filters);
-
-		return filter;
-	}
-
-	@Bean
-	public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(filter);
-		registration.setOrder(-100);
-		return registration;
-	}
-
-	@Bean
-	@ConfigurationProperties("facebook.client")
-	public AuthorizationCodeResourceDetails facebook() {
-		return new AuthorizationCodeResourceDetails();
-	}
-
-	@Bean
-	@ConfigurationProperties("facebook.resource")
-	public ResourceServerProperties facebookResource() {
-		return new ResourceServerProperties();
-	}
-
-
-	@Bean
-	public SocialConfigurer socialConfigurerAdapter(DataSource dataSource) {
-		// https://github.com/spring-projects/spring-social/blob/master/spring-social-config/src/main/java/org/springframework/social/config/annotation/SocialConfiguration.java#L87
-		return new DatabaseConfigurer(dataSource);
-	}
-
-	@RequestMapping("/publish-test")
-	public String publishOnFacebook(Principal principal) {
-		return postOnFacebook(principal.getName(), "me", "test from app");
-	}
-
-	public String postOnFacebook(String userId, String pageId, String message) {
-		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userId);
-		Connection<Facebook> facebookConnection = connectionRepository.getPrimaryConnection(Facebook.class);
-		Facebook facebook = facebookConnection.getApi();
-
-		return facebook.feedOperations().post(pageId, message);
-	}
+//	@RequestMapping("/publish-test")
+//	public String publishOnFacebook(Principal principal) {
+//		return postOnFacebook(principal.getName(), "me", "test from app");
+//	}
+//
+//	public String postOnFacebook(String userId, String pageId, String message) {
+//		ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(userId);
+//		Connection<Facebook> facebookConnection = connectionRepository.getPrimaryConnection(Facebook.class);
+//		Facebook facebook = facebookConnection.getApi();
+//
+//		return facebook.feedOperations().post(pageId, message);
+//	}
 
 //	@Bean
 //	@Scope(value="request", proxyMode= ScopedProxyMode.INTERFACES)

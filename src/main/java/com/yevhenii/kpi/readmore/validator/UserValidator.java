@@ -1,7 +1,6 @@
 package com.yevhenii.kpi.readmore.validator;
 
 import com.yevhenii.kpi.readmore.model.User;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -16,7 +15,7 @@ public class UserValidator implements Validator {
     }
 
     @Override
-    public void validate(@Nullable Object target, Errors errors) {
+    public void validate(Object target, Errors errors) {
         User user = (User) target;
 
         if (Objects.isNull(target)){
