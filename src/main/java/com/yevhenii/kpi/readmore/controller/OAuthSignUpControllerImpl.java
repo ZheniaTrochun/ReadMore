@@ -17,7 +17,6 @@ public class OAuthSignUpControllerImpl implements OAuthSignUpController {
         this.signUpService = signUpService;
     }
 
-    @Autowired
     @RequestMapping("/signup")
     public ModelAndView signup(WebRequest request) {
 
