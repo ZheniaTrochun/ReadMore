@@ -20,15 +20,15 @@ public class SignUpController {
         this.signInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
     }
 
-//    @RequestMapping("/signup")
-//    public String signup(WebRequest request) {
-//        Connection<?> connection = signInUtils.getConnectionFromSession(request);
-//
-//        if (connection != null) {
-//            AuthUtils.authenticate(connection);
-//            signInUtils.doPostSignUp(connection.getDisplayName(), request);
-//        }
-//
-//        return "redirect:/";
-//    }
+    @RequestMapping("/signup")
+    public String signup(WebRequest request) {
+        Connection<?> connection = signInUtils.getConnectionFromSession(request);
+
+        if (connection != null) {
+            AuthUtils.authenticate(connection);
+            signInUtils.doPostSignUp(connection.getDisplayName(), request);
+        }
+
+        return "redirect:/";
+    }
 }

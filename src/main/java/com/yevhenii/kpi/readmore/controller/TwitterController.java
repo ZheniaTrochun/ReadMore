@@ -1,8 +1,12 @@
 package com.yevhenii.kpi.readmore.controller;
 
+import com.yevhenii.kpi.readmore.security.CredsHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.twitter.api.Twitter;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,6 +27,11 @@ public class TwitterController {
 
     private final ConnectionRepository connectionRepository;
 
+    @Value("${spring.social.twitter.appId}")
+    String consumerKey;
+    @Value("${spring.social.twitter.appSecret}")
+    String consumerSecret;
+
     @Autowired
     public TwitterController(Twitter twitter, ConnectionRepository connectionRepository) {
         this.twitter = twitter;
@@ -29,12 +39,20 @@ public class TwitterController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/friends")
-    public String friends() {
+    public String friends(HttpServletRequest request) {
 //        if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
 //            return "redirect:/connect/twitter";
 //        }
 
-        return String.join(",", twitter.friendOperations().getFriends().stream().map(TwitterProfile::getName).collect(Collectors.toList()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Connection<Twitter> connection = connectionRepository.findPrimaryConnection(Twitter.class);
+
+        CredsHolder creds = (CredsHolder) authentication.getCredentials();
+
+        Twitter template = new TwitterTemplate(consumerKey, consumerSecret, creds.getAccessToken(), creds.getSecret());
+
+        return String.join(",", template.friendOperations().getFriends().stream().map(TwitterProfile::getName).collect(Collectors.toList()));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/tweet")

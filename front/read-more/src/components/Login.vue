@@ -16,11 +16,8 @@
     </div>
 
     <md-dialog-actions>
-      <form action="http://127.0.0.1:8090/connect/twitter" method="post">
-        <md-button class="md-raised md-primary" type="submit">Twitter!</md-button>
-      </form>
       <form action="http://127.0.0.1:8090/signin/twitter" method="post">
-        <md-button class="md-raised md-primary" type="submit">Twitter sign in</md-button>
+        <md-button class="md-raised md-primary" type="submit">Twitter!</md-button>
       </form>
       <md-button class="md-raised login" @click="login">Login</md-button>
       <md-button class="md-raised md-accent" @click="closeModal">Close</md-button>

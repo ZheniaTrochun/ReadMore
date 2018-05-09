@@ -1,17 +1,24 @@
 package com.yevhenii.kpi.readmore;
 
+import com.yevhenii.kpi.readmore.controller.TweetAfterConnectInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.security.Principal;
+
 //import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 //import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.oauth2.client.OAuth2ClientContext;
 //import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 //import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -19,33 +26,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 //import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.social.config.annotation.SocialConfigurer;
-import org.springframework.social.connect.*;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.filter.CompositeFilter;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.Filter;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 //import org.springframework.social.twitter.api.Twitter;
 //import org.springframework.social.twitter.api.TwitterProfile;
@@ -77,6 +57,12 @@ public class ReadMoreApplication {
 	@Autowired
 	ConnectionRepository connectionRepository;
 
+	@Autowired
+    ConnectionFactoryLocator connectionFactoryLocator;
+
+	@Autowired
+	Twitter twitter;
+
 //	@Autowired
 //	Twitter twitter;
 
@@ -98,8 +84,17 @@ public class ReadMoreApplication {
 //		return String.join(", ", twitter.friendOperations().getFriends().stream().map(TwitterProfile::getName).collect(Collectors.toList()));
 //	}
 
+    @Bean
+    public ConnectController connectController() {
+        ConnectController controller = new ConnectController(connectionFactoryLocator,
+                connectionRepository);
+        controller.addInterceptor(new TweetAfterConnectInterceptor(connectionRepository));
+        return controller;
+    }
+
 	@RequestMapping("/user")
 	public Principal getPrincipal(Principal principal) {
+    	Connection<Twitter> tw = connectionRepository.findPrimaryConnection(Twitter.class);
 		return principal;
 	}
 
@@ -112,49 +107,52 @@ public class ReadMoreApplication {
 //		return new RequestContextListener();
 //	}
 
-	@RequestMapping(value = "/connect/twitter", method = RequestMethod.GET)
-	public ModelAndView callback(/*@RequestParam String oauth_token, @RequestParam String oauth_verifier,*/ ServletRequest request, ServletResponse response) {
-		log.info("test from connect/twitterConnected");
+//	@RequestMapping(value = "/connect/twitter", method = RequestMethod.GET)
+//	public ModelAndView callback(@RequestParam String oauth_token, @RequestParam String oauth_verifier, ServletRequest request, ServletResponse response) {
+//		log.info("test from connect/twitterConnected");
+////		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
+////			return new ModelAndView("redirect:/connect/twitter");
+////		}
+//
+//		Map map = request.getParameterMap();
+//
+//		HttpServletRequest req = (HttpServletRequest) request;
+//
+//		String query = req.getQueryString();
+//
+//// error here
+////		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
+////		String username = profile.getUsername();
+////		UsernamePasswordAuthenticationToken token =
+////				new UsernamePasswordAuthenticationToken(username, null, null);
+////		SecurityContextHolder.getContext().setAuthentication(token);
+//
+//
+//
+//		return new ModelAndView("redirect:/");
+//	}
+
+//	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
+//	public ModelAndView connect(ServletRequest request) {
+//		log.info("test from connect/twitterConnected");
 //		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
 //			return new ModelAndView("redirect:/connect/twitter");
 //		}
-
-		Map map = request.getParameterMap();
-
-		HttpServletRequest req = (HttpServletRequest) request;
-
-		String query = req.getQueryString();
-// error here
-		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
-		String username = profile.getUsername();
-		UsernamePasswordAuthenticationToken token =
-				new UsernamePasswordAuthenticationToken(username, null, null);
-		SecurityContextHolder.getContext().setAuthentication(token);
-
-		return new ModelAndView("redirect:/");
-	}
-
-	@RequestMapping(value = "/connect/connect/twitterConnected", method = RequestMethod.GET)
-	public ModelAndView connect(ServletRequest request) {
-		log.info("test from connect/twitterConnected");
-		if (connectionRepository.findPrimaryConnection(Twitter.class) == null) {
-			return new ModelAndView("redirect:/connect/twitter");
-		}
-
-		Map map = request.getParameterMap();
-
-		HttpServletRequest req = (HttpServletRequest) request;
-
-		String query = req.getQueryString();
-
-		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
-		String username = profile.getUsername();
-		UsernamePasswordAuthenticationToken token =
-				new UsernamePasswordAuthenticationToken(username, null, null);
-		SecurityContextHolder.getContext().setAuthentication(token);
-
-		return new ModelAndView("redirect:/");
-	}
+//
+//        Map map = request.getParameterMap();
+//
+//		HttpServletRequest req = (HttpServletRequest) request;
+//
+//		String query = req.getQueryString();
+//
+//		UserProfile profile = connectionRepository.findPrimaryConnection(Twitter.class).fetchUserProfile();
+//		String username = profile.getUsername();
+//		UsernamePasswordAuthenticationToken token =
+//				new UsernamePasswordAuthenticationToken(username, null, null);
+//		SecurityContextHolder.getContext().setAuthentication(token);
+//
+//		return new ModelAndView("redirect:/");
+//	}
 
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {
