@@ -20,6 +20,7 @@ public class SignUpController {
         this.signInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
     }
 
+//    todo add dao
     @RequestMapping("/signup")
     public String signup(WebRequest request) {
         Connection<?> connection = signInUtils.getConnectionFromSession(request);

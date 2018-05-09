@@ -19,9 +19,9 @@
               :book="book"
               :enableDelete="true"
               :enableProcess="true"
-              deleteUrl="http://localhost:8080/book/state/"
+              deleteUrl="/book/state/"
               processText="Finish"
-              processUrl="http://localhost:8080/book/state/finished"
+              processUrl="/book/state/finished"
               @processed="onRemoved"
               @removed="onRemoved"/>
       </div>
@@ -53,7 +53,7 @@
 
     mounted() {
       axios.get(
-        'http://localhost:8080/book/state/progress',
+        '/book/state/progress',
         {
           headers: {
             'authorization': getToken()

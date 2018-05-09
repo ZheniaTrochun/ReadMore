@@ -64,4 +64,3 @@ public class TweetAfterConnectInterceptor implements ConnectInterceptor<Twitter>
 //        log.info(connection.getApi().userOperations().getScreenName());
     }
 }
-//5AD885131234AA03CDEAFD329AC7DF3F

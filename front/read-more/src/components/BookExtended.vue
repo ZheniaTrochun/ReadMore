@@ -52,7 +52,7 @@
 
     mounted() {
       axios.get(
-        'http://localhost:8080/book/state/notes',
+        '/book/state/notes',
         {
           headers: {
             'authorization': getToken()
@@ -75,7 +75,7 @@
       saveNotes() {
         axios({
           method: 'put',
-          url: 'http://localhost:8080/book/state/notes',
+          url: '/book/state/notes',
           data: {
             bookId: this.book.id,
             notes: this.notes

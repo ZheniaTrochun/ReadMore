@@ -15,6 +15,7 @@
         </md-button>
 
         <div class="top-buttons">
+          <p v-if="isLoggedIn">{{ username }}</p>
           <md-button class="login md-raised" v-if="!isLoggedIn" @click="showLoginDialog = true">Login</md-button>
           <md-button class="register md-raised" v-if="!isLoggedIn" @click="showRegisterDialog = true">Register</md-button>
           <md-button class="md-primary md-raised" v-if="isLoggedIn" @click="logout">Logout</md-button>
@@ -57,6 +58,7 @@
   import Register from './components/Register.vue'
   import Login from './components/Login.vue'
   import { deleteToken, isLoggedIn } from './auth/auth'
+  import axios from 'axios'
 
   export default {
     components: {
@@ -80,12 +82,21 @@
         failHeader: '',
         failMessage: '',
 
-        isLoggedIn: false
+        isLoggedIn: false,
+        username: ''
       }
     },
 
     mounted() {
       this.isLoggedIn = isLoggedIn()
+
+      axios.get('/user/username').then((res) => {
+        this.username = res.data.username;
+        this.isLoggedIn = true;
+      }).catch((err) => {
+        console.error(err)
+        this.isLoggedIn = false;
+      })
     },
 
     methods: {

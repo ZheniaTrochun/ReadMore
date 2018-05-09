@@ -5,7 +5,6 @@ import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.ServletRequest;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -15,7 +14,7 @@ public interface BookController {
 
     Callable<ResponseEntity<BookResponse>> findOneBookByNameAndAuthor(String name, String author);
 
-    ResponseEntity<List<UserReview>> getReviews(Long bookId, ServletRequest request);
+    ResponseEntity<List<UserReview>> getReviews(Long bookId);
 
-    ResponseEntity<Void> addReviews(UserReviewDto review, ServletRequest request);
+    ResponseEntity<Void> addReviews(UserReviewDto review);
 }

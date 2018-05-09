@@ -60,30 +60,6 @@ public class ReadMoreApplication {
 	@Autowired
     ConnectionFactoryLocator connectionFactoryLocator;
 
-	@Autowired
-	Twitter twitter;
-
-//	@Autowired
-//	Twitter twitter;
-
-//	@Autowired
-//	ConnectionRepository repository;
-
-
-//	@RequestMapping("/")
-//	public String test() {
-//		return "TEST SUCCESS";
-//	}
-
-//	@RequestMapping("/twitter")
-//	public String twitterConnect() {
-//		if (repository.findPrimaryConnection(Twitter.class) == null) {
-//			return "redirect:/connect/twitter";
-//		}
-//
-//		return String.join(", ", twitter.friendOperations().getFriends().stream().map(TwitterProfile::getName).collect(Collectors.toList()));
-//	}
-
     @Bean
     public ConnectController connectController() {
         ConnectController controller = new ConnectController(connectionFactoryLocator,

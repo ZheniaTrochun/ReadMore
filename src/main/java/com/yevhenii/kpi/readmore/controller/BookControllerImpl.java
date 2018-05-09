@@ -3,26 +3,27 @@ package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.model.UserReview;
 import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
-import com.yevhenii.kpi.readmore.utils.ControllerUtils;
-import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
+import com.yevhenii.kpi.readmore.utils.ControllerUtils;
+import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/book")
@@ -100,7 +101,7 @@ public class BookControllerImpl implements BookController {
             produces = "application/json"
     )
     @RequestMapping(value = "/review", method = RequestMethod.GET)
-    public ResponseEntity<List<UserReview>> getReviews(@RequestParam @NotNull Long bookId, ServletRequest request) {
+    public ResponseEntity<List<UserReview>> getReviews(@RequestParam @NotNull Long bookId) {
 
         return ResponseEntity.ok(bookService.getReviews(bookId));
     }
@@ -111,12 +112,14 @@ public class BookControllerImpl implements BookController {
             value = "Endpoint for new review creation"
     )
     @RequestMapping(value = "/review", method = RequestMethod.POST)
-    public ResponseEntity<Void> addReviews(@RequestBody @NotNull UserReviewDto reviewDto, ServletRequest request) {
+    public ResponseEntity<Void> addReviews(@RequestBody @NotNull UserReviewDto reviewDto) {
+
+        String username = ((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName();
 
         UserReview review = new UserReview(
                 reviewDto.getRating(),
                 reviewDto.getDescription(),
-                (String) request.getAttribute("user"));
+                username);
 
         Boolean success = bookService.addReview(review, reviewDto.getBookId());
 

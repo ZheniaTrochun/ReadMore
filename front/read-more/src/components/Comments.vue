@@ -55,7 +55,7 @@
 
     mounted() {
       axios.get(
-        'http://localhost:8080/book/review',
+        '/book/review',
         {
           headers: {
             'authorization': getToken()
@@ -84,7 +84,7 @@
           bookId: this.book.id
         }
 
-        axios.post('http://localhost:8080/book/review', data, axiosConfig)
+        axios.post('/book/review', data, axiosConfig)
           .catch((err) => console.error(err))
 //          .then(() => this.$emit('processed', book))
       }
