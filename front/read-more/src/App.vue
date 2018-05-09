@@ -10,20 +10,21 @@
 
         <h1>Read More!</h1>
 
-        <md-button class="md-icon-button menu-icon" @click="navigation = !navigation">
+        <!-- <md-button class="md-icon-button menu-icon" @click="navigation = !navigation">
           <md-icon>menu</md-icon>
-        </md-button>
+        </md-button> -->
 
         <div class="top-buttons">
-          <p v-if="isLoggedIn">{{ username }}</p>
-          <md-button class="login md-raised" v-if="!isLoggedIn" @click="showLoginDialog = true">Login</md-button>
-          <md-button class="register md-raised" v-if="!isLoggedIn" @click="showRegisterDialog = true">Register</md-button>
+          <p class="username" v-if="isLoggedIn">{{ username }}</p>
+          <md-button class="login md-raised" v-if="!isLoggedIn" @click="showSignInDialog = true">Sign-In</md-button>
+          <!-- <md-button class="login md-raised" v-if="!isLoggedIn" @click="showLoginDialog = true">Login</md-button>
+          <md-button class="register md-raised" v-if="!isLoggedIn" @click="showRegisterDialog = true">Register</md-button> -->
           <md-button class="md-primary md-raised" v-if="isLoggedIn" @click="logout">Logout</md-button>
         </div>
 
       </div>
 
-      <md-tabs v-if="navigation" class="teal" md-alignment="centered" md-sync-route>
+      <md-tabs v-if="navigation" class="head-menu teal" md-alignment="centered" md-sync-route>
         <md-tab id="tab-home" md-label="Home" md-icon="home" to="/"></md-tab>
         <md-tab id="tab-todo" v-if="isLoggedIn" md-label="Todo" md-icon="favorite" to="/todo"></md-tab>
         <md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages" to="/progress"></md-tab>
@@ -39,6 +40,10 @@
 
     <md-dialog :md-active.sync="showLoginDialog">
       <login @clicked="onCloseLoginModal"/>
+    </md-dialog>
+
+    <md-dialog :md-active.sync="showSignInDialog">
+      <sign-in @clicked="onCloseModal" @email="onEmailAuth"/>
     </md-dialog>
 
     <md-dialog-alert
@@ -57,22 +62,25 @@
 <script>
   import Register from './components/Register.vue'
   import Login from './components/Login.vue'
+  import SignIn from './components/Signin.vue'
   import { deleteToken, isLoggedIn } from './auth/auth'
   import axios from 'axios'
 
   export default {
     components: {
       Login,
-      Register
+      Register,
+      SignIn
     },
 
     name: 'App',
 
     data: () => {
       return {
-        navigation: false,
+        navigation: true,
         showRegisterDialog: false,
         showLoginDialog: false,
+        showSignInDialog: false,
 
         success: false,
         successHeader: '',
@@ -91,15 +99,19 @@
       this.isLoggedIn = isLoggedIn()
 
       axios.get('/user/username').then((res) => {
-        this.username = res.data.username;
-        this.isLoggedIn = true;
+        this.username = res.data.username
+        this.isLoggedIn = true
       }).catch((err) => {
         console.error(err)
-        this.isLoggedIn = false;
+        this.isLoggedIn = false
       })
     },
 
     methods: {
+      onCloseModal() {
+        this.showSignInDialog = false
+      },
+
       onCloseLoginModal({res, msg}) {
         this.showLoginDialog = false
 
@@ -133,9 +145,15 @@
         }
       },
 
+      onEmailAuth() {
+        this.showSignInDialog = false
+        this.showRegisterDialog = true
+      },
+
       logout() {
         deleteToken()
         this.isLoggedIn = false
+        window.location = '/'
       }
     }
   }
@@ -152,6 +170,19 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+  }
+
+  .username {
+    display: inline-block;
+    color: white;
+    font-size: 19px;
+    z-index: 1000;
+    position: relative;
+    margin-top: 15px;
+  }
+
+  .head-menu {
+    width: 100% !important;
   }
 
   .head-block {
