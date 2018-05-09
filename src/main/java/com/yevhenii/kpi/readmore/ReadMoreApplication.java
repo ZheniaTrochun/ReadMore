@@ -1,6 +1,5 @@
 package com.yevhenii.kpi.readmore;
 
-import com.yevhenii.kpi.readmore.controller.TweetAfterConnectInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -64,7 +63,7 @@ public class ReadMoreApplication {
     public ConnectController connectController() {
         ConnectController controller = new ConnectController(connectionFactoryLocator,
                 connectionRepository);
-        controller.addInterceptor(new TweetAfterConnectInterceptor(connectionRepository));
+//        controller.addInterceptor(new TweetAfterConnectInterceptor(connectionRepository));
         return controller;
     }
 

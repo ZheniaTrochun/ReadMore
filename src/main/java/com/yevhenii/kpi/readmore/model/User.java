@@ -32,6 +32,7 @@ public class User {
 
     private String hashedPass;
 
+    @Builder.Default
     private String strategy = "password";
 
     public User() {
