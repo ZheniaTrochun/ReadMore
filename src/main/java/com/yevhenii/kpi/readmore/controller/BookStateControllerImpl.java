@@ -128,7 +128,7 @@ public class BookStateControllerImpl implements BookStateController {
         boolean success =
                 bookStateService.addTodoItem(book, username);
 
-        LOGGER.debug(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
+        LOGGER.info(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
                 username,
                 book.getId(),
                 success ? "OK" : "FAILED"));

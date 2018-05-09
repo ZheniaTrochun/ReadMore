@@ -6,6 +6,7 @@ import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
 import com.yevhenii.kpi.readmore.utils.ControllerUtils;
+import com.yevhenii.kpi.readmore.utils.SecurityUtils;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -13,11 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -114,7 +113,7 @@ public class BookControllerImpl implements BookController {
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     public ResponseEntity<Void> addReviews(@RequestBody @NotNull UserReviewDto reviewDto) {
 
-        String username = ((Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName();
+        String username = SecurityUtils.getUsername();
 
         UserReview review = new UserReview(
                 reviewDto.getRating(),
