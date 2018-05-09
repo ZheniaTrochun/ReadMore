@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -84,5 +85,17 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(
                 new UsernameResponse(SecurityUtils.getUsername())
         );
+    }
+
+    @Override
+    @ApiOperation(
+            httpMethod = "GET",
+            value = "Endpoint for get username from session"
+    )
+    @RequestMapping(value = "/logout", method = GET)
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate();
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

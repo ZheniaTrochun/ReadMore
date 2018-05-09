@@ -18,6 +18,7 @@
       </md-card-content>
 
       <md-card-actions>
+        <md-button class="md-primary" v-if="state" @click="tweet">Tweet it!</md-button>
         <md-button class="md-primary" v-if="book.id" @click="showComments = true">Comments({{book.reviewsLength}})</md-button>
         <md-button class="md-primary" v-if="book.id" @click="showExtended = true">Show extended</md-button>
         <md-button class="md-primary" v-if="enableProcess" @click="toStarted(book)">{{ processText }}</md-button>
@@ -47,7 +48,9 @@
   export default {
     components: {
       CommentList,
-      BookExt},
+      BookExt
+    },
+
     name: 'book',
 
     props: {
@@ -72,6 +75,10 @@
         required: false
       },
       deleteUrl: {
+        type: String,
+        required: false
+      },
+      state: {
         type: String,
         required: false
       }
@@ -102,6 +109,11 @@
         })
           .then((res) => this.$emit('removed', book))
           .catch((err) => console.error(err))
+      },
+
+      tweet() {
+        axios.post('/twitter/tweet/book?state=' + this.state + '&bookId=' + this.book.id)
+          .then((res) => console.log(res))
       }
     },
 

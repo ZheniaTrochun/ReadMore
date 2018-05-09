@@ -22,6 +22,7 @@
               deleteUrl="/book/state/"
               processText="Start"
               processUrl="/book/state/finished"
+              state="FINISHED"
               @processed="onRemoved"
               @removed="onRemoved"/>
       </div>
