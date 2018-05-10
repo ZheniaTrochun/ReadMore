@@ -2,6 +2,7 @@ package com.yevhenii.kpi.readmore.controller;
 
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.dto.UserNotesDto;
+import com.yevhenii.kpi.readmore.model.response.BookCreationResponse;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.response.NotesResponse;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public interface BookStateController {
 
     ResponseEntity<List<BookResponse>> getUserTodo();
 
-    ResponseEntity<Void> addUserTodo(Book book);
+    ResponseEntity<BookCreationResponse> addUserTodo(Book book);
 
     ResponseEntity<List<BookResponse>> getUserProgress();
 

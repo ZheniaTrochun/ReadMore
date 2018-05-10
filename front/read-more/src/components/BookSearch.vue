@@ -64,7 +64,8 @@
           .catch((err) => console.error(err))
       },
 
-      add(book) {
+      add(book, data) {
+        book.id = data.id
         this.$emit('added', book)
       }
     },

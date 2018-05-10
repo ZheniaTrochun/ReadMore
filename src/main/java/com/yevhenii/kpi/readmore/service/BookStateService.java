@@ -10,7 +10,7 @@ public interface BookStateService {
 
     List<Book> getBooksByStateAndUser(String username, State state);
 
-    Boolean addTodoItem(Book book, String username);
+    Optional<Book> addTodoItem(Book book, String username);
 
     Boolean changeState(Book book, String username, State target);
 

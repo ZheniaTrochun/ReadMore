@@ -95,7 +95,6 @@ public class UserControllerImpl implements UserController {
     @RequestMapping(value = "/logout", method = GET)
     public ResponseEntity<Void> logout(HttpSession session) {
         session.invalidate();
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

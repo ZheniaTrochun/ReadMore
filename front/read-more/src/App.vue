@@ -24,15 +24,30 @@
 
       </div>
 
+      <!--<md-tabs v-if="navigation" class="head-menu teal" md-alignment="centered" md-sync-route>-->
+        <!--<md-tab id="tab-home" md-label="Home" md-icon="home" to="/"></md-tab>-->
+        <!--<md-tab id="tab-todo" v-if="isLoggedIn" md-label="Todo" md-icon="favorite" to="/todo"></md-tab>-->
+        <!--<md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages" to="/progress"></md-tab>-->
+        <!--<md-tab id="tab-finished" v-if="isLoggedIn" md-label="Finished" md-icon="pages" to="/finished"></md-tab>-->
+      <!--</md-tabs>-->
+
       <md-tabs v-if="navigation" class="head-menu teal" md-alignment="centered" md-sync-route>
-        <md-tab id="tab-home" md-label="Home" md-icon="home" to="/"></md-tab>
-        <md-tab id="tab-todo" v-if="isLoggedIn" md-label="Todo" md-icon="favorite" to="/todo"></md-tab>
-        <md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages" to="/progress"></md-tab>
-        <md-tab id="tab-finished" v-if="isLoggedIn" md-label="Finished" md-icon="pages" to="/finished"></md-tab>
+        <md-tab id="tab-home" md-label="Home" md-icon="home">
+          <home/>
+        </md-tab>
+        <md-tab id="tab-todo" v-if="isLoggedIn" md-label="Todo" md-icon="favorite">
+          <user-todos @action="updateProgress"/>
+        </md-tab>
+        <md-tab id="tab-progress" v-if="isLoggedIn" md-label="In Progress" md-icon="pages">
+          <user-progress ref="progress" :trigger="triggerProgress" @action="updateFinished"/>
+        </md-tab>
+        <md-tab id="tab-finished" v-if="isLoggedIn" md-label="Finished" md-icon="pages">
+          <user-finished ref="finished" :trigger="triggerFinished"/>
+        </md-tab>
       </md-tabs>
     </div>
 
-    <router-view/>
+    <!--<router-view/>-->
 
     <md-dialog :md-active.sync="showRegisterDialog">
       <register @clicked="onCloseRegisterModal"/>
@@ -65,9 +80,17 @@
   import SignIn from './components/Signin.vue'
   import { deleteToken, isLoggedIn } from './auth/auth'
   import axios from 'axios'
+  import Home from "./components/Home.vue";
+  import UserTodos from "./components/UserTodos.vue";
+  import UserProgress from "./components/UserProgress.vue";
+  import UserFinished from "./components/UserFinished.vue";
 
   export default {
     components: {
+      UserFinished,
+      UserProgress,
+      UserTodos,
+      Home,
       Login,
       Register,
       SignIn
@@ -77,6 +100,9 @@
 
     data: () => {
       return {
+        triggerProgress: 0,
+        triggerFinished: 0,
+
         navigation: true,
         showRegisterDialog: false,
         showLoginDialog: false,
@@ -108,6 +134,16 @@
     },
 
     methods: {
+      updateProgress() {
+        console.debug('update progress')
+        this.$refs.progress.update()
+      },
+
+      updateFinished() {
+        console.debug('update finished')
+        this.$refs.finished.update()
+      },
+
       onCloseModal() {
         this.showSignInDialog = false
       },
@@ -151,9 +187,9 @@
       },
 
       logout() {
-        deleteToken()
         this.isLoggedIn = false
-        window.location = '/'
+        axios.get('/user/logout')
+          .then(() => window.location = '/')
       }
     }
   }
@@ -211,6 +247,16 @@
     position: absolute;
     left: -60px;
     transform: skewX(-50deg) translateX(0);
+  }
+
+  .md-tab {
+    height: 100vh !important;
+    width: 100%;
+    flex: 1 0 100%;
+    position: relative;
+    top: -170px;
+    z-index: -1000;
+    padding: 0 !important;
   }
 
   .icon {

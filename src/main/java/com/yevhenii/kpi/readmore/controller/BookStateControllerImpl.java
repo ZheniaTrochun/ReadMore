@@ -3,6 +3,7 @@ package com.yevhenii.kpi.readmore.controller;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.State;
 import com.yevhenii.kpi.readmore.model.dto.UserNotesDto;
+import com.yevhenii.kpi.readmore.model.response.BookCreationResponse;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.model.response.NotesResponse;
 import com.yevhenii.kpi.readmore.service.BookStateService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -121,19 +123,21 @@ public class BookStateControllerImpl implements BookStateController {
             value = "Adds new book to todo-list"
     )
     @RequestMapping(value = "/todo", method = RequestMethod.POST)
-    public ResponseEntity<Void> addUserTodo(@RequestBody @Valid Book book) {
+    public ResponseEntity<BookCreationResponse> addUserTodo(@RequestBody @Valid Book book) {
 
         String username = SecurityUtils.getUsername();
 
-        boolean success =
+        Optional<Book> result =
                 bookStateService.addTodoItem(book, username);
 
         LOGGER.info(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
                 username,
                 book.getId(),
-                success ? "OK" : "FAILED"));
+                result.isPresent() ? "OK" : "FAILED"));
 
-        return ControllerUtils.okOrBadRequest(success);
+        return result
+                .map(b -> ResponseEntity.ok(new BookCreationResponse(b.getId())))
+                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @Override

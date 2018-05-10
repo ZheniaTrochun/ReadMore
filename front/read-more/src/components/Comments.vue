@@ -6,6 +6,7 @@
       <comment v-for="comment in comments" :comment="comment" />
 
       <md-field>
+        <label for="rating">Rating</label>
         <md-select v-model="rating" name="rating" id="rating" placeholder="0">
           <md-option value="1">1</md-option>
           <md-option value="2">2</md-option>
@@ -54,23 +55,27 @@
     },
 
     mounted() {
-      axios.get(
-        '/book/review',
-        {
-          headers: {
-            'authorization': getToken()
-          },
-          params: {
-            'bookId': this.book.id
-          }
-        })
-        .then((res) => {
-          this.comments = res.data
-        })
-        .catch((err) => console.error(err))
+      this.update()
     },
 
     methods: {
+      update() {
+        axios.get(
+          '/book/review',
+          {
+            headers: {
+              'authorization': getToken()
+            },
+            params: {
+              'bookId': this.book.id
+            }
+          })
+          .then((res) => {
+            this.comments = res.data
+          })
+          .catch((err) => console.error(err))
+      },
+
       add() {
         const axiosConfig = {
           headers: {
@@ -86,7 +91,7 @@
 
         axios.post('/book/review', data, axiosConfig)
           .catch((err) => console.error(err))
-//          .then(() => this.$emit('processed', book))
+          .then(() => this.update())
       }
     },
 
@@ -101,10 +106,19 @@
   }
 </script>
 
-<style scoped>
+<style>
   .comments-holder {
     padding: 50px;
     overflow: auto;
+  }
+
+  .md-select-menu {
+    z-index: 10 !important;
+    width: 280px;
+  }
+
+  .md-select {
+    width: 280px !important;
   }
 
   .container {

@@ -38,14 +38,13 @@ public class BookStateServiceImpl implements BookStateService {
                 .collect(Collectors.toList());
     }
 
-//    todo refactor
     @Override
-    public Boolean addTodoItem(Book book, String username) {
+    public Optional<Book> addTodoItem(Book book, String username) {
 
         return userService.findUserByUsername(username)
                 .flatMap(user -> createBookState(bookService.saveOrGetIfPresent(book), user)
                         .map(bookStateRepository::save))
-                .isPresent();
+                .map(BookState::getBook);
     }
 
     @Override
