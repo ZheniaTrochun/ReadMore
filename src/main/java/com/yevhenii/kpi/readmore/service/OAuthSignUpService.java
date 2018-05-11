@@ -8,6 +8,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
@@ -27,7 +28,6 @@ public class OAuthSignUpService {
         this.signInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
     }
 
-    //    todo add dao
     //    todo think about duplicated usernames
     public boolean signup(WebRequest request) {
         Connection<?> connection = signInUtils.getConnectionFromSession(request);
@@ -47,7 +47,7 @@ public class OAuthSignUpService {
             return userRepository.save(user);
         });
 
-        AuthUtils.authenticate(connection);
+        AuthUtils.authenticateWithTwitter((Connection<Twitter>) connection);
         signInUtils.doPostSignUp(connection.getDisplayName(), request);
 
         return true;

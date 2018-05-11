@@ -2,6 +2,7 @@ package com.yevhenii.kpi.readmore.controller;
 
 
 import com.yevhenii.kpi.readmore.model.UserReview;
+import com.yevhenii.kpi.readmore.model.dto.BookDto;
 import com.yevhenii.kpi.readmore.model.dto.UserReviewDto;
 import com.yevhenii.kpi.readmore.model.response.BookResponse;
 import com.yevhenii.kpi.readmore.service.BookService;
@@ -17,17 +18,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/book")
 public class BookControllerImpl implements BookController {
 
+//    todo replace
     private static final Logger LOGGER = LoggerFactory.getLogger(BookControllerImpl.class);
 
     private final BookService bookService;
@@ -92,6 +97,13 @@ public class BookControllerImpl implements BookController {
         };
     }
 
+//    todo
+    @Override
+    @RequestMapping("/book/all")
+    public ResponseEntity<List<BookResponse>> getBooksFromDb() {
+        return null;
+    }
+
     @Override
     @ApiOperation(
             httpMethod = "GET",
@@ -125,5 +137,19 @@ public class BookControllerImpl implements BookController {
         LOGGER.debug("Review addition done, success = " + success);
 
         return ControllerUtils.okOrBadRequest(success);
+    }
+
+//    todo
+    @Override
+    @RequestMapping(value = "/review", method = DELETE)
+    public ResponseEntity<Void> deleteReview(@RequestParam String author, @RequestParam Date date) {
+        return null;
+    }
+
+//    todo
+    @Override
+    @RequestMapping(method = POST, produces = "application/json")
+    public ResponseEntity<BookResponse> createBook(@RequestBody BookDto dto) {
+        return null;
     }
 }

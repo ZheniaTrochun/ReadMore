@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -51,7 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator", "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/register").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers(HttpMethod.DELETE, "/book/review").hasRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/book").hasRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/book/all").hasRole("ROLE_ADMIN")
+                .antMatchers("/admin/register").hasRole("ROLE_ADMIN")
+                .anyRequest().hasRole("ROLE_USER");
 //                .and()
 //                .addFilterBefore(new JwtLoginFilter("/user/login", authenticationManager()),
 //                        UsernamePasswordAuthenticationFilter.class)
@@ -68,11 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .password(encoder().encode("admin"))
 //                .roles("USER");
 //    }
-//
-//    @Bean
-//    public PasswordEncoder encoder() {
-//        return new BCryptPasswordEncoder(11);
-//    }
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder(11);
+    }
 //
 //    @Bean
 //    public AuthenticationProvider authenticationProvider() {

@@ -43,7 +43,7 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
 
     private String constructAuthor(VolumeInfo volumeInfo) {
         return Objects.isNull(volumeInfo.getAuthors()) ?
-                "" : String.join(", ", volumeInfo.getAuthors());
+                "-" : String.join(", ", volumeInfo.getAuthors());
     }
 
     private Integer constructYear(VolumeInfo volumeInfo) {
