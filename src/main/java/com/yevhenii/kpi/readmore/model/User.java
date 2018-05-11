@@ -3,6 +3,7 @@ package com.yevhenii.kpi.readmore.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//import javax.validation.constraints.Email;
 
 @Entity
 @Data
@@ -26,6 +26,7 @@ public class User {
     @NotNull
     private String name;
 
+    @Email
     private String email;
 
     private String role;

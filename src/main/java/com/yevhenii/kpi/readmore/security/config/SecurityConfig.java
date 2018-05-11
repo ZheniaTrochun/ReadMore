@@ -53,11 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator", "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/register").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/book/review").hasRole("ROLE_ADMIN")
-                .antMatchers(HttpMethod.POST, "/book").hasRole("ROLE_ADMIN")
-                .antMatchers(HttpMethod.GET, "/book/all").hasRole("ROLE_ADMIN")
-                .antMatchers("/admin/register").hasRole("ROLE_ADMIN")
-                .anyRequest().hasRole("ROLE_USER");
+                .antMatchers(HttpMethod.DELETE, "/book/review").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/book").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/book/all").hasRole("ADMIN")
+                .antMatchers("/admin/register").hasRole("ADMIN")
+                .anyRequest().hasRole("USER");
 //                .and()
 //                .addFilterBefore(new JwtLoginFilter("/user/login", authenticationManager()),
 //                        UsernamePasswordAuthenticationFilter.class)

@@ -2,7 +2,9 @@ package com.yevhenii.kpi.readmore.service;
 
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.UserReview;
+import com.yevhenii.kpi.readmore.model.dto.BookDto;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,5 +20,11 @@ public interface BookService {
 
     List<UserReview> getReviews(Long bookId);
 
-    Boolean addReview(UserReview review, Long bookId);
+    boolean addReview(UserReview review, Long bookId);
+
+    List<Book> getBooksFromDb();
+
+    boolean deleteReview(Long bookId, String author, Date date);
+
+    Book createBook(BookDto dto);
 }

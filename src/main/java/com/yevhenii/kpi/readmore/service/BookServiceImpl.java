@@ -1,16 +1,20 @@
 package com.yevhenii.kpi.readmore.service;
 
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
-import com.yevhenii.kpi.readmore.model.UserReview;
-import com.yevhenii.kpi.readmore.utils.converter.BookResponseToBookConverter;
 import com.yevhenii.kpi.readmore.model.Book;
+import com.yevhenii.kpi.readmore.model.UserReview;
+import com.yevhenii.kpi.readmore.model.dto.BookDto;
 import com.yevhenii.kpi.readmore.repository.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -101,7 +105,7 @@ public class BookServiceImpl implements BookService {
      * @return true if all good and false if book not found
      */
     @Override
-    public Boolean addReview(UserReview review, Long bookId) {
+    public boolean addReview(UserReview review, Long bookId) {
 
         return bookRepository.findOneById(bookId)
                 .flatMap(book -> {
@@ -109,6 +113,37 @@ public class BookServiceImpl implements BookService {
                     return Optional.of(bookRepository.save(book));
                 })
                 .isPresent();
+    }
+
+    @Override
+    public List<Book> getBooksFromDb() {
+        return bookRepository.findAll();
+    }
+
+    @Override
+    public boolean deleteReview(Long bookId, String author, Date date) {
+
+        return bookRepository.findOneById(bookId)
+                .flatMap(b -> b.getReviews()
+                        .stream()
+                        .filter(review -> review.getDate().equals(date) && review.getAuthor().equals(author))
+                        .findFirst().map(b.getReviews()::remove))
+                .orElse(false);
+    }
+
+    @Override
+    public Book createBook(BookDto dto) {
+
+        return bookRepository.save(
+                Book.builder()
+                        .name(dto.getName())
+                        .author(dto.getAuthor())
+                        .description(dto.getDescription())
+                        .year(dto.getYear())
+                        .imageUrl(dto.getImageUrl())
+                        .genre(dto.getGenre())
+                        .build()
+        );
     }
 
     /**

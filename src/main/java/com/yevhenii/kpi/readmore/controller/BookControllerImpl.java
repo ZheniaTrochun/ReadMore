@@ -24,9 +24,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/book")
@@ -97,11 +95,16 @@ public class BookControllerImpl implements BookController {
         };
     }
 
-//    todo
     @Override
     @RequestMapping("/book/all")
     public ResponseEntity<List<BookResponse>> getBooksFromDb() {
-        return null;
+
+        return ResponseEntity.ok(
+                bookService.getBooksFromDb()
+                        .stream()
+                        .map(converter)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -139,17 +142,19 @@ public class BookControllerImpl implements BookController {
         return ControllerUtils.okOrBadRequest(success);
     }
 
-//    todo
     @Override
     @RequestMapping(value = "/review", method = DELETE)
-    public ResponseEntity<Void> deleteReview(@RequestParam String author, @RequestParam Date date) {
-        return null;
+    public ResponseEntity<Void> deleteReview(@RequestParam Long bookId, @RequestParam String author, @RequestParam Date date) {
+
+        return ControllerUtils.okOrBadRequest(bookService.deleteReview(bookId, author, date));
     }
 
-//    todo
     @Override
     @RequestMapping(method = POST, produces = "application/json")
     public ResponseEntity<BookResponse> createBook(@RequestBody BookDto dto) {
-        return null;
+
+        return ResponseEntity.ok(
+                converter.apply(bookService.createBook(dto))
+        );
     }
 }

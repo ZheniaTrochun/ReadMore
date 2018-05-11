@@ -2,10 +2,11 @@ package com.yevhenii.kpi.readmore.security.config;
 
 import com.yevhenii.kpi.readmore.security.AuthUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
+import org.springframework.social.twitter.api.Twitter;
 
 @Configuration
 @Slf4j
@@ -18,7 +19,7 @@ public class SocialConfiguration {
             log.info("connection = " + connection.toString());
             log.info("request = " + request.toString());
 
-            AuthUtils.authenticate(connection);
+            AuthUtils.authenticateWithTwitter((Connection<Twitter>) connection);
             return null;
         };
     }

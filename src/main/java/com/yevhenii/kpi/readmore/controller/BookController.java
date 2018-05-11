@@ -22,7 +22,7 @@ public interface BookController {
 
     ResponseEntity<Void> addReviews(UserReviewDto review);
 
-    ResponseEntity<Void> deleteReview(String author, Date date);
+    ResponseEntity<Void> deleteReview(Long bookId, String author, Date date);
 
     ResponseEntity<BookResponse> createBook(BookDto dto);
 }

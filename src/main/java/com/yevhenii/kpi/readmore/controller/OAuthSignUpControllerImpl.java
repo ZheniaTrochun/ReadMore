@@ -21,6 +21,7 @@ public class OAuthSignUpControllerImpl implements OAuthSignUpController {
     public ModelAndView signup(WebRequest request) {
 
         return signUpService.signup(request) ?
-                new ModelAndView("redirect:/") : new ModelAndView("redirect:/error");
+                new ModelAndView("redirect:/") :
+                    new ModelAndView("redirect:/error");
     }
 }
