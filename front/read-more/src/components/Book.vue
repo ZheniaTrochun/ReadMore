@@ -27,7 +27,7 @@
           Tweet it!
         </md-button>
         <md-button class="md-primary" v-if="book.id" @click="showComments = true">Comments({{book.reviewsLength}})</md-button>
-        <md-button class="md-primary" v-if="book.id" @click="showExtended = true">Show extended</md-button>
+        <md-button class="md-primary" v-if="book.id && state" @click="showExtended = true">Show extended</md-button>
         <md-button class="md-primary" v-if="enableProcess" @click="toStarted(book)">{{ processText }}</md-button>
         <md-button class="md-accent" v-if="enableDelete" @click="removeFromTodo(book)">Delete</md-button>
       </md-card-actions>
@@ -39,7 +39,7 @@
     </md-dialog>
 
     <md-dialog :md-active.sync="showComments">
-      <comment-list :book="book"/>
+      <comment-list :book="book" @commentRemoved="onCommentRemoved"/>
     </md-dialog>
 
     <md-snackbar md-position="center" md-duration="2000" :md-active.sync="showSnackbar" md-persistent>
@@ -125,6 +125,10 @@
       tweet() {
         axios.post('/twitter/tweet/book?state=' + this.state + '&bookId=' + this.book.id)
           .then(() => this.showSnackbar = true)
+      },
+
+      onCommentRemoved() {
+        this.book.reviewsLength--
       }
     },
 

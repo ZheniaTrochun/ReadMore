@@ -1,5 +1,6 @@
 package com.yevhenii.kpi.readmore.service;
 
+import com.google.common.base.Strings;
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.UserReview;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -121,13 +121,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean deleteReview(Long bookId, String author, Date date) {
+    public boolean deleteReview(Long bookId, Long id) {
+
+        //        return bookRepository.findOneById(bookId)
+//                .flatMap(b -> b.getReviews()
+//                        .stream()
+//                        .filter(review -> review.getId().equals(id))
+//                        .findFirst().map(b.getReviews()::remove))
+//                .orElse(false);
 
         return bookRepository.findOneById(bookId)
-                .flatMap(b -> b.getReviews()
-                        .stream()
-                        .filter(review -> review.getDate().equals(date) && review.getAuthor().equals(author))
-                        .findFirst().map(b.getReviews()::remove))
+                .flatMap(b -> {
+                    Optional<Boolean> res = b.getReviews()
+                            .stream()
+                            .filter(review -> review.getId().equals(id))
+                            .findFirst().map(b.getReviews()::remove);
+                    bookRepository.save(b);
+
+                    return res;
+                })
                 .orElse(false);
     }
 
@@ -140,10 +152,20 @@ public class BookServiceImpl implements BookService {
                         .author(dto.getAuthor())
                         .description(dto.getDescription())
                         .year(dto.getYear())
-                        .imageUrl(dto.getImageUrl())
+                        .imageUrl(Strings.isNullOrEmpty(dto.getImageUrl()) ? "" : dto.getImageUrl())
                         .genre(dto.getGenre())
                         .build()
         );
+    }
+
+    @Override
+    public boolean deleteBook(Long bookId) {
+        try {
+            bookRepository.delete(bookId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**

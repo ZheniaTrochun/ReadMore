@@ -3,7 +3,7 @@
 
       <h2>{{ book.name }}</h2>
 
-      <comment v-for="comment in comments" :comment="comment" />
+      <comment v-for="comment in comments" :comment="comment" :book="book" @removedComment="onRemoved"/>
 
       <md-field>
         <label for="rating">Rating</label>
@@ -92,6 +92,11 @@
         axios.post('/book/review', data, axiosConfig)
           .catch((err) => console.error(err))
           .then(() => this.update())
+      },
+
+      onRemoved(comment) {
+        this.comments = this.comments.filter((c) => c !== comment)
+        this.$emit('commentRemoved', '')
       }
     },
 

@@ -4,7 +4,6 @@ import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.UserReview;
 import com.yevhenii.kpi.readmore.model.dto.BookDto;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,9 @@ public interface BookService {
 
     List<Book> getBooksFromDb();
 
-    boolean deleteReview(Long bookId, String author, Date date);
+    boolean deleteReview(Long bookId, Long id);
 
     Book createBook(BookDto dto);
+
+    boolean deleteBook(Long bookId);
 }
