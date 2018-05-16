@@ -18,13 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private final UserDetailsServiceImpl userDetailsService;
-//
-//    @Autowired
-//    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
-//        this.userDetailsService = userDetailsService;
-//    }
-
     @Bean
     public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();
@@ -58,38 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/book").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/book").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/book/all").hasRole("ADMIN")
-                .antMatchers("/admin/register").permitAll()
+                .antMatchers("/admin/register").hasRole("ADMIN")
                 .antMatchers("/user/username").hasAnyRole("ADMIN", "USER")
                 .anyRequest().hasRole("USER");
-//                .and()
-//                .addFilterBefore(new JwtLoginFilter("/user/login", authenticationManager()),
-//                        UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new JwtAuthenticationFilter(),
-//                        UsernamePasswordAuthenticationFilter.class);
     }
-//
-//    @Override
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-////        default account creation
-//        auth.authenticationProvider(authenticationProvider())
-//                .inMemoryAuthentication()
-//                .withUser("admin")
-//                .password(encoder().encode("admin"))
-//                .roles("USER");
-//    }
 
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
     }
-//
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//
-//        authProvider.setPasswordEncoder(encoder());
-//        authProvider.setUserDetailsService(userDetailsService);
-//
-//        return authProvider;
-//    }
 }

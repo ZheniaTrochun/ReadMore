@@ -3,7 +3,6 @@
   <div class="register-holder" style="text-align: center;">
     <md-dialog-title>Sign In</md-dialog-title>
 
-    <!-- <md-dialog-actions> -->
       <div class="">
 
         <div class="md-layout md-gutter md-alignment-center">
@@ -21,13 +20,13 @@
           </div>
         </div>
 
-        <div class="md-layout md-gutter md-alignment-center">
+        <!-- <div class="md-layout md-gutter md-alignment-center">
           <div class="md-layout-item  md-xsmall-size-100">
             <form class="">
               <md-button class="md-raised login" @click="email">Sign in with email</md-button>
             </form>
           </div>
-        </div>
+        </div> -->
 
         <div class="md-layout md-gutter md-alignment-center">
           <div class="md-layout-item  md-xsmall-size-100">
@@ -37,7 +36,6 @@
           </div>
         </div>
       </div>
-    <!-- </md-dialog-actions> -->
   </div>
 
 </template>

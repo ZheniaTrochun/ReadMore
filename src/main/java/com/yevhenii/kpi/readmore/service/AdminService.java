@@ -11,4 +11,6 @@ public interface AdminService {
     User register(String username, String email, String password, BindingResult result)
             throws RegistrationException;
 
+    User register(String username, String email, String password)
+            throws RegistrationException;
 }

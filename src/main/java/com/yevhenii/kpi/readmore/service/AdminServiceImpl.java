@@ -10,8 +10,6 @@ import com.yevhenii.kpi.readmore.security.AuthUtils;
 import com.yevhenii.kpi.readmore.validator.UserValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -51,6 +49,23 @@ public class AdminServiceImpl implements AdminService {
             log.warn("Validation failed");
             throw new UserValidationFailedException();
         }
+
+        if (userRepository.findUserByName(username).isPresent()) {
+            log.warn("Username is already taken, email = " + email);
+            throw new UsernameIsAlreadyTakenException();
+        }
+
+        if (userRepository.findUserByEmail(email).isPresent()) {
+            log.warn("Email is already taken, email = " + email);
+            throw new EmailIsAlreadyTakenException();
+        }
+
+        return userRepository.save(newUser);
+    }
+
+    @Override
+    public User register(String username, String email, String password) throws RegistrationException {
+        User newUser = new User(username, email, encoder.encode(password), "ROLE_ADMIN");
 
         if (userRepository.findUserByName(username).isPresent()) {
             log.warn("Username is already taken, email = " + email);
