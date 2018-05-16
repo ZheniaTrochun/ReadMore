@@ -37,6 +37,7 @@ public class Book {
     private String imageUrl;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "book_id")
     private List<UserReview> reviews;
 
     public Book() {
