@@ -8,16 +8,11 @@
       <md-field>
         <label for="rating">Rating</label>
         <md-select v-model="rating" name="rating" id="rating" placeholder="0">
-          <md-option value="1">1</md-option>
-          <md-option value="2">2</md-option>
-          <md-option value="3">3</md-option>
-          <md-option value="4">4</md-option>
-          <md-option value="5">5</md-option>
-          <md-option value="6">6</md-option>
-          <md-option value="7">7</md-option>
-          <md-option value="8">8</md-option>
-          <md-option value="9">9</md-option>
-          <md-option value="10">10</md-option>
+          <md-option value="1"><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
+          <md-option value="2"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
+          <md-option value="3"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
+          <md-option value="4"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon></md-option>
+          <md-option value="5"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon></md-option>
         </md-select>
       </md-field>
 
