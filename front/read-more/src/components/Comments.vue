@@ -3,20 +3,16 @@
 
       <h2>{{ book.name }}</h2>
 
-      <comment v-for="comment in comments" :comment="comment" />
+      <comment v-for="comment in comments" :comment="comment" :book="book" @removedComment="onRemoved"/>
 
       <md-field>
+        <label for="rating">Rating</label>
         <md-select v-model="rating" name="rating" id="rating" placeholder="0">
           <md-option value="1">1</md-option>
           <md-option value="2">2</md-option>
           <md-option value="3">3</md-option>
           <md-option value="4">4</md-option>
           <md-option value="5">5</md-option>
-          <md-option value="6">6</md-option>
-          <md-option value="7">7</md-option>
-          <md-option value="8">8</md-option>
-          <md-option value="9">9</md-option>
-          <md-option value="10">10</md-option>
         </md-select>
       </md-field>
 
@@ -54,23 +50,27 @@
     },
 
     mounted() {
-      axios.get(
-        'http://localhost:8080/book/review',
-        {
-          headers: {
-            'authorization': getToken()
-          },
-          params: {
-            'bookId': this.book.id
-          }
-        })
-        .then((res) => {
-          this.comments = res.data
-        })
-        .catch((err) => console.error(err))
+      this.update()
     },
 
     methods: {
+      update() {
+        axios.get(
+          '/book/review',
+          {
+            headers: {
+              'authorization': getToken()
+            },
+            params: {
+              'bookId': this.book.id
+            }
+          })
+          .then((res) => {
+            this.comments = res.data
+          })
+          .catch((err) => console.error(err))
+      },
+
       add() {
         const axiosConfig = {
           headers: {
@@ -84,9 +84,15 @@
           bookId: this.book.id
         }
 
-        axios.post('http://localhost:8080/book/review', data, axiosConfig)
+        axios.post('/book/review', data, axiosConfig)
           .catch((err) => console.error(err))
-//          .then(() => this.$emit('processed', book))
+          .then(() => this.update())
+      },
+
+      onRemoved(comment) {
+        console.log("REMOVED COMMENT")
+        this.comments = this.comments.filter((c) => c !== comment)
+        this.$emit('commentRemoved', '')
       }
     },
 
@@ -101,10 +107,19 @@
   }
 </script>
 
-<style scoped>
+<style>
   .comments-holder {
     padding: 50px;
     overflow: auto;
+  }
+
+  .md-select-menu {
+    z-index: 10 !important;
+    width: 280px;
+  }
+
+  .md-select {
+    width: 280px !important;
   }
 
   .container {

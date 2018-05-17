@@ -1,6 +1,9 @@
 package com.yevhenii.kpi.readmore.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,8 +36,8 @@ public class Book {
     private String genre;
     private String imageUrl;
 
-    @ElementCollection
-    @CollectionTable(name = "book_review", joinColumns = @JoinColumn(name = "book_id"))
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "book_id")
     private List<UserReview> reviews;
 
     public Book() {

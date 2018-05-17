@@ -1,16 +1,18 @@
 package com.yevhenii.kpi.readmore.api.google.converter;
 
+import com.google.common.base.Strings;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.ImageLinks;
 import com.yevhenii.kpi.readmore.api.google.model.VolumeInfo;
 import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.function.Function;
+
+//import org.apache.logging.log4j.util.Strings;
 
 @Component
 public class GoogleBookResponseToBookConverter implements Function<GoogleBookResponse, Book> {
@@ -31,12 +33,17 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
         return Book
                 .builder()
                 .name(volumeInfo.getTitle())
-                .author(String.join(", ", volumeInfo.getAuthors()))
+                .author(constructAuthor(volumeInfo))
                 .genre(volumeInfo.getMainCategory())
                 .imageUrl(constructImage(volumeInfo))
                 .year(constructYear(volumeInfo))
                 .description(volumeInfo.getDescription())
                 .build();
+    }
+
+    private String constructAuthor(VolumeInfo volumeInfo) {
+        return Objects.isNull(volumeInfo.getAuthors()) ?
+                "-" : String.join(", ", volumeInfo.getAuthors());
     }
 
     private Integer constructYear(VolumeInfo volumeInfo) {
@@ -59,11 +66,11 @@ public class GoogleBookResponseToBookConverter implements Function<GoogleBookRes
             return defaultImage;
         }
 
-        if (Strings.isNotBlank(imageLinks.getLarge())) {
+        if (!Strings.isNullOrEmpty(imageLinks.getLarge())) {
             return imageLinks.getLarge();
         }
 
-        if (Strings.isNotBlank(imageLinks.getThumbnail())) {
+        if (!Strings.isNullOrEmpty(imageLinks.getThumbnail())) {
             return imageLinks.getThumbnail();
         }
 

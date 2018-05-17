@@ -40,11 +40,16 @@
       login() {
         console.log("login")
         axios.post(
-          'http://localhost:8080/user/login',
+          '/admin/login',
           JSON.stringify({
             username: this.username,
             password: this.password
-          }))
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
           .then((res) => {
             console.log(res.headers['authorization'])
             storeToken(res.headers['authorization'])

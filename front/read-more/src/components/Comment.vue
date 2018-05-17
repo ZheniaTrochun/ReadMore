@@ -1,6 +1,8 @@
 <template>
   <md-card>
-    <md-card-content>
+    <md-card-content class="comment-holder">
+
+      <md-button v-if="comment.deletable" @click="deleteComment" class="md-accent remove-comment">X</md-button>
 
       <h4>
         Author: {{ comment.author }}
@@ -27,6 +29,31 @@
       comment: {
         type: Object,
         required: true
+      },
+      book: {
+        type: Object,
+        required: true
+      }
+    },
+
+    methods: {
+      deleteComment() {
+        axios({
+          method: 'delete',
+          url: '/book/review',
+          params: {
+            bookId: this.book.id,
+            id: this.comment.id
+          },
+          headers: {
+            'authorization': getToken()
+          }
+        })
+          .then((res) => {
+            console.log("comment removed")
+            this.$emit('removedComment', comment)
+          })
+          .catch((err) => console.error(err))
       }
     }
   }
@@ -39,8 +66,6 @@
     display: inline-block;
     vertical-align: top;
   }
-
-
 
   .container {
     position: relative !important;
@@ -76,5 +101,15 @@
 
   .md-card {
     width: 100%;
+  }
+
+  .comment-holder {
+    position: relative;
+  }
+
+  .remove-comment {
+    position: absolute;
+    right: 10px;
+    top: 10px;
   }
 </style>

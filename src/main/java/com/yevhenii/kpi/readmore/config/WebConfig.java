@@ -3,13 +3,12 @@ package com.yevhenii.kpi.readmore.config;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableAutoConfiguration
-@EnableWebMvc
+//@EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
@@ -28,4 +27,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
+
+//    @Override
+//    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+//        ErrorController myErrorController = new ErrorController();
+//        myErrorController.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        exceptionResolvers.add(myErrorController);
+//    }
 }

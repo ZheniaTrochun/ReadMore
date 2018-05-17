@@ -21,7 +21,7 @@
             :enableDelete="false"
             :enableProcess="true"
             processText="TODO"
-            processUrl="http://localhost:8080/book/state/todo"
+            processUrl="/book/state/todo"
             @processed="add"/>
     </div>
 
@@ -52,7 +52,7 @@
         console.log("search")
 
         axios.get(
-          'http://localhost:8080/book?name=' + this.bookName + '&author=' + this.author,
+          '/book?name=' + this.bookName + '&author=' + this.author,
           {
             headers: {
               'authorization': getToken()
@@ -64,7 +64,8 @@
           .catch((err) => console.error(err))
       },
 
-      add(book) {
+      add(book, data) {
+        book.id = data.id
         this.$emit('added', book)
       }
     },

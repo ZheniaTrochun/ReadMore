@@ -1,13 +1,12 @@
 package com.yevhenii.kpi.readmore.api.google;
 
-import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookConverter;
-import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.api.RemoteBookApi;
+import com.yevhenii.kpi.readmore.api.google.converter.GoogleBookResponseToBookConverter;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBookResponse;
 import com.yevhenii.kpi.readmore.api.google.model.GoogleBooksHolder;
+import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.utils.properties.AppPropertyHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class GoogleBookApi implements RemoteBookApi {
 
     private final RestTemplate restTemplate;
@@ -29,7 +29,6 @@ public class GoogleBookApi implements RemoteBookApi {
 
     private GoogleBookResponseToBookConverter converter;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleBookApi.class);
 
     @Autowired
     public GoogleBookApi(RestTemplate restTemplate,
