@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.api.TwitterProfile;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
 
@@ -45,33 +44,10 @@ public class TwitterServiceImpl implements TwitterService {
     }
 
     @Override
-    public List<String> getFriendNames() {
-
-        return createTemplate()
-                .friendOperations()
-                .getFriends()
-                .stream()
-                .map(TwitterProfile::getName)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Tweet tweet(String text, Twitter twitter) {
 
         return twitter.timelineOperations().updateStatus(text);
     }
-
-    @Override
-    public List<String> getFriendNames(Twitter twitter) {
-
-        return twitter
-                .friendOperations()
-                .getFriends()
-                .stream()
-                .map(TwitterProfile::getName)
-                .collect(Collectors.toList());
-    }
-
 
     @Override
     public TwitterTemplate createTemplate() {

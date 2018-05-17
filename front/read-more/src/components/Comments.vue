@@ -8,11 +8,11 @@
       <md-field>
         <label for="rating">Rating</label>
         <md-select v-model="rating" name="rating" id="rating" placeholder="0">
-          <md-option value="1"><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
-          <md-option value="2"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
-          <md-option value="3"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon><md-icon>star_border</md-icon></md-option>
-          <md-option value="4"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star_border</md-icon></md-option>
-          <md-option value="5"><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon><md-icon>star</md-icon></md-option>
+          <md-option value="1">1</md-option>
+          <md-option value="2">2</md-option>
+          <md-option value="3">3</md-option>
+          <md-option value="4">4</md-option>
+          <md-option value="5">5</md-option>
         </md-select>
       </md-field>
 
@@ -90,6 +90,7 @@
       },
 
       onRemoved(comment) {
+        console.log("REMOVED COMMENT")
         this.comments = this.comments.filter((c) => c !== comment)
         this.$emit('commentRemoved', '')
       }

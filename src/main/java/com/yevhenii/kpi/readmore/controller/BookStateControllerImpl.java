@@ -11,8 +11,7 @@ import com.yevhenii.kpi.readmore.utils.ControllerUtils;
 import com.yevhenii.kpi.readmore.utils.SecurityUtils;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +25,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/book/state")
+@Slf4j
 public class BookStateControllerImpl implements BookStateController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookStateControllerImpl.class);
 
     private final BookStateService bookStateService;
 
@@ -54,7 +52,7 @@ public class BookStateControllerImpl implements BookStateController {
         boolean success =
                 bookStateService.deleteState(bookId, username);
 
-        LOGGER.debug(String.format("Deleting book state for user[%s], bookId[%d], result[%s]",
+        log.debug(String.format("Deleting book state for user[%s], bookId[%d], result[%s]",
                 username,
                 bookId,
                 success ? "OK" : "FAILED"));
@@ -91,7 +89,7 @@ public class BookStateControllerImpl implements BookStateController {
 
         Boolean success = bookStateService.updateUserNotes(notes.getNotes(), notes.getBookId(), username);
 
-        LOGGER.debug(String.format("Editing notes for user[%s], bookId[%d], result[%s]",
+        log.debug(String.format("Editing notes for user[%s], bookId[%d], result[%s]",
                 username,
                 notes.getBookId(),
                 success ? "OK" : "FAILED"));
@@ -130,7 +128,7 @@ public class BookStateControllerImpl implements BookStateController {
         Optional<Book> result =
                 bookStateService.addTodoItem(book, username);
 
-        LOGGER.info(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
+        log.info(String.format("Todo addition for user[%s], bookId[%d], result[%s]",
                 username,
                 book.getId(),
                 result.isPresent() ? "OK" : "FAILED"));
@@ -171,7 +169,7 @@ public class BookStateControllerImpl implements BookStateController {
         boolean success =
                 bookStateService.changeState(book, username, State.IN_PROGRESS);
 
-        LOGGER.debug(String.format("In-Progress item addition for user[%s], bookId[%d], result[%s]",
+        log.debug(String.format("In-Progress item addition for user[%s], bookId[%d], result[%s]",
                 username,
                 book.getId(),
                 success ? "OK" : "FAILED"));
@@ -210,7 +208,7 @@ public class BookStateControllerImpl implements BookStateController {
         boolean success =
                 bookStateService.changeState(book, username, State.FINISHED);
 
-        LOGGER.debug(String.format("Finished item addition for user[%s], bookId[%d], result[%s]",
+        log.debug(String.format("Finished item addition for user[%s], bookId[%d], result[%s]",
                 username,
                 book.getId(),
                 success ? "OK" : "FAILED"));

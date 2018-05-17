@@ -12,8 +12,7 @@ import com.yevhenii.kpi.readmore.utils.SecurityUtils;
 import com.yevhenii.kpi.readmore.utils.converter.BookDtoToBookConverter;
 import com.yevhenii.kpi.readmore.utils.converter.BookToBookResponseConverter;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +30,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/book")
+@Slf4j
 public class BookControllerImpl implements BookController {
-
-//    todo replace
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookControllerImpl.class);
 
     private final BookService bookService;
 
@@ -62,7 +59,7 @@ public class BookControllerImpl implements BookController {
     public Callable<ResponseEntity<List<BookResponse>>> findBooksByNameAndAuthor(@RequestParam String name,
                                                                                  @RequestParam String author) {
 
-        LOGGER.debug(String.format("find book called with name = %s and author = %s", name, author));
+        log.debug(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
             List<BookResponse> books = bookService.findManyBooksByNameAndAuthor(name, author)
@@ -70,7 +67,7 @@ public class BookControllerImpl implements BookController {
                     .map(converter)
                     .collect(Collectors.toList());
 
-            LOGGER.debug(String.format("found books, length = %d", books.size()));
+            log.debug(String.format("found books, length = %d", books.size()));
 
             return ResponseEntity.ok(books);
         };
@@ -88,13 +85,13 @@ public class BookControllerImpl implements BookController {
     public Callable<ResponseEntity<BookResponse>> findOneBookByNameAndAuthor(@RequestParam String name,
                                                                              @RequestParam String author) {
 
-        LOGGER.debug(String.format("find book called with name = %s and author = %s", name, author));
+        log.debug(String.format("find book called with name = %s and author = %s", name, author));
 
         return () -> {
             Optional<BookResponse> book = bookService.findOneBookByNameAndAuthor(name, author)
                     .map(converter);
 
-            LOGGER.debug(String.format("found book option = %s", book.toString()));
+            log.debug(String.format("found book option = %s", book.toString()));
 
             return book
                     .map(ResponseEntity::ok)
@@ -163,7 +160,7 @@ public class BookControllerImpl implements BookController {
 
         Boolean success = bookService.addReview(review, reviewDto.getBookId());
 
-        LOGGER.debug("Review addition done, success = " + success);
+        log.debug("Review addition done, success = " + success);
 
         return ControllerUtils.okOrBadRequest(success);
     }

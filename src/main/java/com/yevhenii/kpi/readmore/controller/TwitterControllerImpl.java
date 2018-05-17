@@ -5,7 +5,6 @@ import com.yevhenii.kpi.readmore.service.TwitterService;
 import com.yevhenii.kpi.readmore.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.twitter.api.Twitter;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/twitter")
@@ -38,22 +35,6 @@ public class TwitterControllerImpl implements TwitterController {
         this.twitter = twitter;
         this.connectionRepository = connectionRepository;
         this.twitterService = twitterService;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/friends")
-    public ResponseEntity<List<String>> friends() {
-
-        return ResponseEntity.ok(twitterService.getFriendNames());
-    }
-
-//    todo refactor
-    @RequestMapping(method = RequestMethod.GET, value = "/tweet")
-    public ResponseEntity<Void> tweet() {
-
-        return new ResponseEntity<>(
-                twitterService.tweet("Read More!").getText().equals("Read More!") ?
-                        HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR
-        );
     }
 
     @Override

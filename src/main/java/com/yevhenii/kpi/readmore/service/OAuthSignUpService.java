@@ -28,7 +28,6 @@ public class OAuthSignUpService {
         this.signInUtils = new ProviderSignInUtils(connectionFactoryLocator, connectionRepository);
     }
 
-    //    todo think about duplicated usernames
     public boolean signup(WebRequest request) {
         Connection<?> connection = signInUtils.getConnectionFromSession(request);
 

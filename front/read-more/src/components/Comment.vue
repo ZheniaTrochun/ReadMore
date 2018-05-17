@@ -49,7 +49,10 @@
             'authorization': getToken()
           }
         })
-          .then((res) => this.$emit('removedComment', comment))
+          .then((res) => {
+            console.log("comment removed")
+            this.$emit('removedComment', comment)
+          })
           .catch((err) => console.error(err))
       }
     }

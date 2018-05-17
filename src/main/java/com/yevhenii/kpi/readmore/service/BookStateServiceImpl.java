@@ -39,6 +39,7 @@ public class BookStateServiceImpl implements BookStateService {
     }
 
     @Override
+    @Transactional
     public Optional<Book> addTodoItem(Book book, String username) {
 
         return userService.findUserByUsername(username)
@@ -63,7 +64,6 @@ public class BookStateServiceImpl implements BookStateService {
                 .isPresent();
     }
 
-//    todo add logging
     @Override
     @Transactional
     public Boolean deleteState(Long bookId, String username) {
@@ -94,7 +94,6 @@ public class BookStateServiceImpl implements BookStateService {
                 .isPresent();
     }
 
-//    todo think about this
     private Optional<BookState> createBookState(Book book, User user) {
         if (bookStateRepository.findOneByUser_NameAndBook_NameAndBook_Author(user.getName(),
                         book.getName(), book.getAuthor()).isPresent()) {

@@ -6,8 +6,7 @@ import com.yevhenii.kpi.readmore.model.Book;
 import com.yevhenii.kpi.readmore.model.UserReview;
 import com.yevhenii.kpi.readmore.model.dto.BookDto;
 import com.yevhenii.kpi.readmore.repository.BookRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +18,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class BookServiceImpl implements BookService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookServiceImpl.class);
 
     private final BookRepository bookRepository;
     private final RemoteBookApi bookApi;
@@ -39,12 +37,12 @@ public class BookServiceImpl implements BookService {
         Optional<Book> fromDb = bookRepository.findBookByNameAndAuthor(name, author);
 
         if(fromDb.isPresent()) {
-            LOGGER.debug("Book found in Database, book = " + fromDb.get().toString());
+            log.debug("Book found in Database, book = " + fromDb.get().toString());
 
             return fromDb;
         }
 
-        LOGGER.debug("Book not found in Database, fetching from api...");
+        log.debug("Book not found in Database, fetching from api...");
 //        if there isn't suitable book in db, we ask api
         return bookApi
                 .getOneBookByNameAndAuthor(name, author)
@@ -76,13 +74,13 @@ public class BookServiceImpl implements BookService {
     public Book saveOrGetIfPresent(Book book) {
         if (Objects.isNull(book.getId())) {
             try {
-                LOGGER.debug("Book id is null, saving to Database");
+                log.debug("Book id is null, saving to Database");
 
                 return save(book);
             } catch (Exception e) {
-                LOGGER.warn("Tried to save duplicated book!");
+                log.warn("Tried to save duplicated book!");
 
-                return bookRepository.findBookByNameAndAuthor(book.getName(), book.getAuthor()).get();
+                return bookRepository.findBookByNameAndAuthor(book.getName(), book.getAuthor()).orElse(null);
             }
         }
 
@@ -122,13 +120,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean deleteReview(Long bookId, Long id) {
-
-        //        return bookRepository.findOneById(bookId)
-//                .flatMap(b -> b.getReviews()
-//                        .stream()
-//                        .filter(review -> review.getId().equals(id))
-//                        .findFirst().map(b.getReviews()::remove))
-//                .orElse(false);
 
         return bookRepository.findOneById(bookId)
                 .flatMap(b -> {

@@ -4,8 +4,6 @@ import com.yevhenii.kpi.readmore.model.response.UsernameResponse;
 import com.yevhenii.kpi.readmore.service.UserService;
 import com.yevhenii.kpi.readmore.utils.SecurityUtils;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +20,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @RequestMapping("/user")
 public class UserControllerImpl implements UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserControllerImpl.class);
-
     private final UserService userService;
 
     private final RestTemplate restTemplate;
@@ -33,26 +29,6 @@ public class UserControllerImpl implements UserController {
         this.userService = userService;
         this.restTemplate = restTemplate;
     }
-
-//    @Override
-//    @ApiOperation(
-//            httpMethod = "POST",
-//            value = "Endpoint for users registration"
-//    )
-//    @RequestMapping(value = "/register", method = POST)
-//    public ResponseEntity<Void> register(@RequestBody @Valid UserRegisterDto registerDto, BindingResult result)
-//            throws RegistrationException {
-//
-//        User user = userService.register(registerDto.getUsername(),
-//                registerDto.getEmail(),
-//                registerDto.getPassword(),
-//                result);
-//
-//        LOGGER.debug("User registered " + user.toString());
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
     @Override
     @ApiOperation(
             httpMethod = "GET",
