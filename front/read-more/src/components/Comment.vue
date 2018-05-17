@@ -51,7 +51,7 @@
         })
           .then((res) => {
             console.log("comment removed")
-            this.$emit('removedComment', comment)
+            this.$emit('removedComment', this.comment)
           })
           .catch((err) => console.error(err))
       }
