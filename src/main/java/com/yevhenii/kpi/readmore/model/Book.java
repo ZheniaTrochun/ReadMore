@@ -69,18 +69,17 @@ public class Book {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Book)) return false;
-        if (!super.equals(o)) return false;
         Book book = (Book) o;
         return getName().equals(book.getName()) &&
                 getAuthor().equals(book.getAuthor());
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
 
-        return Objects.hash(super.hashCode(), getName(), getAuthor());
+        return Objects.hash(getName(), getAuthor());
     }
 }
