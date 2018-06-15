@@ -29,6 +29,8 @@ public class GoogleBookApi implements RemoteBookApi {
 
     private GoogleBookResponseToBookConverter converter;
 
+    private final static String SEARCH_PATTERN = "?q=\"%s\"+inauthor:\"%s\"&projection=full&printType=books";
+
 
     @Autowired
     public GoogleBookApi(RestTemplate restTemplate,
@@ -43,7 +45,6 @@ public class GoogleBookApi implements RemoteBookApi {
 
     @Override
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
-
         ResponseEntity<GoogleBooksHolder> booksHolder =
                 restTemplate.getForEntity(constructApiUrl(name, author), GoogleBooksHolder.class);
 
@@ -75,7 +76,6 @@ public class GoogleBookApi implements RemoteBookApi {
 
     @Override
     public Optional<Book> getOneBookByNameAndAuthor(String name, String author) {
-
         return getBooksByNameAndAuthor(name, author)
                 .stream()
                 .findFirst();
@@ -83,7 +83,7 @@ public class GoogleBookApi implements RemoteBookApi {
 
     private String constructApiUrl(String name, String author) {
         return String.format(googleBookApiUrl,
-                String.format("?q=\"%s\"+inauthor:\"%s\"&projection=full&printType=books", name, author));
+                String.format(SEARCH_PATTERN, name, author));
     }
 
     private String constructApiUrl(String id) {

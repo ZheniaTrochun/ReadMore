@@ -50,17 +50,7 @@ public class AdminServiceImpl implements AdminService {
             throw new UserValidationFailedException();
         }
 
-        if (userRepository.findUserByName(username).isPresent()) {
-            log.warn("Username is already taken, email = " + email);
-            throw new UsernameIsAlreadyTakenException();
-        }
-
-        if (userRepository.findUserByEmail(email).isPresent()) {
-            log.warn("Email is already taken, email = " + email);
-            throw new EmailIsAlreadyTakenException();
-        }
-
-        return userRepository.save(newUser);
+        return register(username, email, password);
     }
 
     @Override
@@ -68,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
         User newUser = new User(username, email, encoder.encode(password), "ROLE_ADMIN");
 
         if (userRepository.findUserByName(username).isPresent()) {
-            log.warn("Username is already taken, email = " + email);
+            log.warn("Username is already taken, username = " + username);
             throw new UsernameIsAlreadyTakenException();
         }
 

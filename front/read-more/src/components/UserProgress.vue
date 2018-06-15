@@ -25,9 +25,6 @@
               @removed="onRemoved"/>
       </div>
 
-      <!--<md-button class="md-fab md-primary add-todo" @click="showSearchDialog = true">-->
-        <!--<md-icon>add</md-icon>-->
-      <!--</md-button>-->
       <md-button class="md-fab md-primary tweet-list" @click="tweetList">
         <md-icon>
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">

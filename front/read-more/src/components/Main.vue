@@ -34,8 +34,6 @@
       </md-tabs>
     </div>
 
-    <!--<router-view/>-->
-
     <md-dialog :md-active.sync="showRegisterDialog">
       <register @clicked="onCloseRegisterModal"/>
     </md-dialog>

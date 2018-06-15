@@ -129,7 +129,6 @@ public class TwitterServiceImpl implements TwitterService {
 
     @Override
     public Boolean tweetBook(State state, Long bookId) {
-
         return bookRepository.findOneById(bookId)
                 .map(book -> createTemplate()
                         .timelineOperations().
